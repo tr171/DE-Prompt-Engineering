@@ -205,7 +205,7 @@ def send_message(session_id, scenario_id, simulation_id, message, model, mode):
 
 
 # Personas say exactly "Please coach me" when they are ready for coaching
-# (see personas/_TEMPLATE.py). The app treats that phrase as the switch into
+# (see avatars/_TEMPLATE/personas.py). The app treats that phrase as the switch into
 # coaching, so the runner must not send it as an ordinary scenario message.
 COACHING_PHRASE_RE = re.compile(r"please\W+coach\W+me", re.IGNORECASE)
 
@@ -223,7 +223,7 @@ def split_coaching_request(statement):
 
 
 # Each persona can carry its own follow-up behavior: everything from the line
-# that starts "After coaching" to the end of its prompt (see personas/jim.py).
+# that starts "After coaching" to the end of its prompt (see avatars/jim/personas.py).
 # When a persona has one, it is added to the shared MENTORING_FOLLOWUP_PROMPT,
 # so score challenges and pushback get tested. Personas without one use the
 # shared prompt alone, exactly as before.
@@ -449,7 +449,7 @@ def prompt_for_avatars(candidate_names):
 
 def prompt_for_rounds(default_rounds):
     """Asks how many rounds to run this time. Pressing Enter with nothing
-    typed keeps the usual default (ROUNDS in personas/__init__.py) -
+    typed keeps the usual default (ROUNDS in personas.py) -
     handy since most days you want the full battery, and this shouldn't
     get in the way on those days. Keeps asking until it gets a usable
     answer. Raises KeyboardInterrupt if the user cancels with Ctrl+C.

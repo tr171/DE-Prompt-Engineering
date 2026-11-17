@@ -38,7 +38,7 @@ Revision 10/12/26 (Better Path AI QA, outcome-based rebuild OB1):
   to judge "the scenario's objective", but the context (after the 10/2 rewrite) never states
   one, so each persona was guessing.
 - High Learner and Efficient Expert: explicit "objective reached" conditions. The turn cap is
-  already 24 (personas/__init__.py); Sept sessions ended at 5-15 turns because the learner AI
+  already 24 (personas.py); Sept sessions ended at 5-15 turns because the learner AI
   signaled done early, after a summary and a next step but before the stories.
 - New probes (run once near the end, not in the standard four):
   Surface Persister, Efficient Expert, Corrector, Patronizing.

@@ -40,9 +40,11 @@ it into `avatars/<name>/runs/`** — filing it is what makes it tracked.
 
 ```
 config.example.py  .env.example   copy these to config.py / .env
+personas.py                       loads the avatars; shared settings
 core/                             the shared engine
-personas/                         one file per avatar - personas + expectations
-avatars/<name>/                   everything specific to one avatar
+avatars/<name>/                   everything about one avatar:
+    personas.py                     its learner personas + expectations
+    prompts/ runs/ docs/ tools/     added as work on it starts
 docs/                             cross-avatar notes and design specs
 ```
 
@@ -56,26 +58,53 @@ docs/                             cross-avatar notes and design specs
 | `core/export_portal_personas.py` | turns a persona file into paste-ready portal fields |
 | `core/probe_after_mode.py` | diagnostic: which avatar fields the platform uses after coaching |
 | `core/test_openai_connection.py` | confirms your OpenAI key works |
-| `personas/` | one file per avatar — the personas and expectations |
+| `personas.py` | combines the avatars' persona files; holds shared settings |
+| `avatars/<name>/personas.py` | that avatar's learner personas and expectations |
 | `avatars/<name>/tools/` | scripts that only make sense for that avatar |
 | `docs/` | cross-avatar notes and design specs |
 
 **Run every command from the repo root**, giving the full path —
 `python core/run_qa_tests.py`, not `cd core && python run_qa_tests.py`.
 Each script puts the repo root on its own import path, so `config.py` and
-`personas/` resolve from wherever it sits.
+`personas.py` resolve from wherever it sits.
 
 Shared settings — rounds, turn caps, the `"Please coach me"` trigger — live at
-the bottom of [personas/__init__.py](personas/__init__.py).
+the bottom of [personas.py](personas.py).
 
-To add an avatar: copy `personas/_TEMPLATE.py`, rename it, fill it in. It's
-picked up automatically.
+To add an avatar: copy the `avatars/_TEMPLATE/` folder, rename it to the avatar's
+name in lower case, and fill in its `personas.py`. It's picked up automatically —
+a folder starting with `_` is skipped, which is what keeps the template out.
 
-## Avatars
+## Avatar roster
 
-Each avatar folder follows the same shape: `prompts/` (what gets pasted into
+All 16 avatars are runnable now — every one has personas and a `config.py` entry.
+The folders listed under *Also has* are the ones with prompt or QA work done so far.
+
+| Folder | Avatar name in `config.py` | Personas | Also has |
+|---|---|---:|---|
+| [`benton/`](avatars/benton/) | Benton | 4 | `archive/`, `prompts/`, `runs/`, `tests/`, `tools/` |
+| [`carol/`](avatars/carol/) | Carol | 4 | — personas only, no QA work yet |
+| [`elaine/`](avatars/elaine/) | Elaine | 4 | `docs/`, `prompts/`, `runs/`, `tools/` |
+| [`gladys/`](avatars/gladys/) | Gladys | 4 | `archive/`, `docs/`, `runs/`, `settings/` |
+| [`jd_med/`](avatars/jd_med/) | JD_Med | 4 | — personas only, no QA work yet |
+| [`jdmeal/`](avatars/jdmeal/) | JDMeal | 4 | — personas only, no QA work yet |
+| [`jim/`](avatars/jim/) | Jim | 4 | — personas only, no QA work yet |
+| [`john/`](avatars/john/) | John | 10 | `runs/` |
+| [`jordancc/`](avatars/jordancc/) | JordanCC | 4 | — personas only, no QA work yet |
+| [`jordandiff/`](avatars/jordandiff/) | JordanDiff | 4 | — personas only, no QA work yet |
+| [`madison/`](avatars/madison/) | Madison - Behavioral Health - Moderate | 4 | — personas only, no QA work yet |
+| [`marcus/`](avatars/marcus/) | Marcus | 4 | — personas only, no QA work yet |
+| [`maya/`](avatars/maya/) | Maya - Behavioral Health - Moderate | 4 | — personas only, no QA work yet |
+| [`michael/`](avatars/michael/) | Michael | 4 | — personas only, no QA work yet |
+| [`ross/`](avatars/ross/) | Ross | 4 | — personas only, no QA work yet |
+| [`tony/`](avatars/tony/) | Tony | 4 | — personas only, no QA work yet |
+
+## Where the QA work is
+
+Four avatars have had prompt or QA work done on them so far. Each folder
+follows the same shape: `personas.py`, then `prompts/` (what gets pasted into
 the portal), `runs/` (results and transcripts), `docs/` (findings), plus
-`settings/`, `tests/` or `archive/` where they apply.
+`settings/`, `tests/`, `tools/` or `archive/` where they apply.
 
 ### [Gladys](avatars/gladys/) — Alzheimer's senior care, new caregiver intro
 

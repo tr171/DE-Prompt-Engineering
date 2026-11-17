@@ -7,8 +7,8 @@ Structure only. Except for the Null probes, no persona's own wording was rewritt
 - **core/run_qa_tests.py**: when the learner says "Please coach me" during the scenario, the tool no longer sends it to the avatar as a scenario message (`before`). It goes straight to coaching and sends the phrase as `during`, like the app does. If the learner said three or more other words in that same message, those words are still sent first as a scenario line.
 - **core/probe_after_mode.py**: fixed a startup error. It imported `AVATAR_MODEL`, which the runner no longer has.
 - **New: core/check_personas.py** checks every avatar file against the standard layout and config.py. It never calls OpenAI or Better Path AI.
-- **New: personas/_TEMPLATE.py** is a blank avatar file with notes on every part.
-- **personas/__init__.py**: the "how to add an avatar" note now points to the template.
+- **New: avatars/_TEMPLATE/personas.py** is a blank avatar file with notes on every part.
+- **personas.py**: the "how to add an avatar" note now points to the template.
 - **GUIDE.md**: Step 1 (file list, one-line rename for the personas folder), Step 6 rewritten for the new layout, two troubleshooting entries updated, and "Better Path AI" written in full throughout.
 - **Not changed:** config.py. It's yours and holds your credentials. One cosmetic fix you can make yourself: its top comment still says "Azure OpenAI"; the tool uses native OpenAI.
 

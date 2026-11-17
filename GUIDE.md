@@ -17,7 +17,8 @@ We confirmed the avatar side works by testing it live against Madison - Behavior
 
 This came with:
 - `config.py` — your credentials and the list of avatars you're testing
-- `personas/` — a **folder**, not a single file: one file per avatar (e.g. `Tony.py`, `Ross.py`), a blank `_TEMPLATE.py` for new avatars, and an `__init__.py` that combines them and holds a few settings shared across every avatar. See Step 6.
+- `avatars/<name>/personas.py` — one per avatar (e.g. `avatars/tony/personas.py`), holding that avatar's learner personas and expectations. A blank `avatars/_TEMPLATE/` is there to copy for new avatars. See Step 6.
+- `personas.py` — combines every avatar's file into one list for the tool, and holds the few settings shared across all of them (how many rounds, the turn caps, the coaching phrase). You edit it to change those settings; you never edit it to add an avatar.
 - `core/check_personas.py` — checks every avatar file for common mistakes before you run (Step 6)
 - `core/probe_after_mode.py` — a diagnostic that shows which avatar fields the platform uses for follow-up questions (only when asked to run it)
 - `core/learner_ai.py` — talks to OpenAI to generate each learner line
@@ -27,7 +28,7 @@ This came with:
 - `avatars/<name>/` — everything specific to one avatar: the prompts you paste into the portal, the results of past runs, the findings written up, and in `tools/` any scripts that only make sense for that avatar
 - `requirements.txt` — the two small libraries it needs
 
-**Run every command from this top folder**, giving the full path — `python core/run_qa_tests.py`, not `cd core` first. Each script finds `config.py` and `personas/` on its own from there.
+**Run every command from this top folder**, giving the full path — `python core/run_qa_tests.py`, not `cd core` first. Each script finds `config.py` and `personas.py` on its own from there.
 
 ## Important: about your credentials
 
@@ -160,9 +161,11 @@ This sends one trivial request and tells you immediately whether your key and mo
 
 ## Step 6: Persona files (one per avatar)
 
-`personas` is a **folder** with one file per avatar — `Tony.py`, `Ross.py`, `Gladys.py`, and so on. Each file holds everything for that one avatar, and nothing you do in one file affects any other avatar or the rest of the tool.
+Each avatar has its own folder under `avatars/`, and its personas live in that folder as `personas.py` — `avatars/tony/personas.py`, `avatars/ross/personas.py`, `avatars/gladys/personas.py`, and so on. Each file holds everything for that one avatar, and nothing you do in one file affects any other avatar or the rest of the tool.
 
-As of October 13, 2026 **every avatar file uses the same layout.** `Tony.py` and `Ross.py` are the best worked examples, and `personas\_TEMPLATE.py` is a blank copy with notes on every part. (Its name starts with an underscore, so the tool skips it.)
+The folder name is just a folder name. The name that has to match `config.py` is the **key of the `PERSONAS` dict inside the file**, which is why `avatars/maya/personas.py` can hold an avatar called "Maya - Behavioral Health - Moderate".
+
+As of October 13, 2026 **every avatar file uses the same layout.** `avatars/tony/personas.py` and `avatars/ross/personas.py` are the best worked examples, and `avatars/_TEMPLATE/personas.py` is a blank copy with notes on every part. (Its folder starts with an underscore, so the tool skips it.)
 
 ### What's in an avatar file, top to bottom
 
@@ -230,7 +233,7 @@ python core/check_personas.py
    ```
    python core/run_qa_tests.py
    ```
-2. It lists every avatar that's ready to run (has both an entry in `config.py`'s `SCENARIOS` and at least one filled-in persona prompt in its `personas/` file) and asks which ones you want to test today:
+2. It lists every avatar that's ready to run (has both an entry in `config.py`'s `SCENARIOS` and at least one filled-in persona prompt in its `avatars/<name>/personas.py`) and asks which ones you want to test today:
    ```
    Which avatars do you want to test today?
 
@@ -320,7 +323,7 @@ Run Step 8 first; only reach for the judge when you want the detail.
 
 An avatar whose persona file has no `EXPECTATIONS` entry is skipped with a
 note. Entries written as loose prose give unreliable verdicts — write them as
-short, checkable statements, the way `personas/Gladys.py` does.
+short, checkable statements, the way `avatars/gladys/personas.py` does.
 
 ## Step 10: Set an avatar up in the QA Lab portal
 
@@ -362,7 +365,7 @@ You skipped Step 5, or left `OPENAI_API_KEY` or `OPENAI_MODEL` blank in `config.
 **An error mentioning a file in the `personas` folder (a `SyntaxError`, or a name it doesn't recognize)**
 Python's error message will point you straight to the exact file and line — open that one file in Notepad and check it against `madison.py`'s pattern. The most common cause is a quote mark or set of triple quotes (`"""`) that doesn't line up right in a `"context"` block, especially after pasting in a long rubric. See the earlier note in this guide about `"""` and stray quotes if you're not sure what to look for.
 
-**"(personas/somefile.py doesn't define a PERSONAS dict - skipping it.)" printed when you run the tool**
+**"(avatars/<name>/personas.py doesn't define a PERSONAS dict - skipping it.)" printed when you run the tool**
 Not an error — just a heads-up that one of your avatar files doesn't have a module-level `PERSONAS = {...}` in it yet, so it was skipped. If that file is meant to be a real avatar, check it matches `madison.py`'s pattern. If it's meant to be scratch notes or a template, rename it to start with an underscore (e.g. `_notes.py`) so the tool stops mentioning it.
 
 **"WARNING: '...' is defined in more than one file under personas/"**

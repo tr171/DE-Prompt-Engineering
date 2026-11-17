@@ -1,17 +1,21 @@
 """
 BPAI QA Automation - Persona Loader
 -------------------------------------
-This used to be a single personas.py file. Now it's a folder: one file per
-avatar (madison.py, maya.py, and so on), so you can add or edit an avatar
-without wading through everyone else's content, and without ever touching
-this file.
+This used to be a personas/ folder with one file per avatar. Now each avatar
+owns its own personas file inside its own folder:
+
+    avatars/gladys/personas.py
+    avatars/tony/personas.py
+    ...
+
+so everything about one avatar - its personas, the prompts you paste into the
+portal, past results, findings - sits together in avatars/<name>/.
 
 You will almost never need to open this file. It exists to:
 
-1. Automatically find every avatar file in this folder and combine them
-   into one PERSONAS dict - the same shape core/run_qa_tests.py and
-   core/learner_ai.py have always expected, so neither of them needed to
-   change at all when this split happened.
+1. Find every avatars/*/personas.py and combine them into one PERSONAS dict -
+   the same shape core/run_qa_tests.py and core/learner_ai.py have always
+   expected, so neither of them needed to change when this moved.
 2. Hold the handful of settings that apply across EVERY avatar (how many
    rounds to run, the turn caps, the coaching trigger phrase) - see the
    bottom of this file.
@@ -20,12 +24,12 @@ You will almost never need to open this file. It exists to:
    produced. Avatar files without one are skipped by the judge and are
    otherwise completely unaffected.
 
-HOW TO ADD A NEW AVATAR: copy _TEMPLATE.py in this folder, rename the copy
-to the avatar's name (e.g. Carol.py), and fill it in. Every avatar file uses
-the same layout as Tony.py and Ross.py: a SHARED_CONTEXT, a LIBRARY of
-personas (the standard four plus probes), RUN_SETS, and a RUN_SET line at
-the top that picks which personas run. The file ends with a module-level
-PERSONAS dict, which is all this loader needs:
+HOW TO ADD A NEW AVATAR: copy the avatars/_TEMPLATE/ folder, rename the copy to
+the avatar's name in lower case (e.g. avatars/carol/), and fill in its
+personas.py. Every avatar file uses the same layout: a SHARED_CONTEXT, a
+LIBRARY of personas (the standard four plus probes), RUN_SETS, and a RUN_SET
+line at the top that picks which personas run. The file ends with a
+module-level PERSONAS dict, which is all this loader needs:
 
     PERSONAS = {
         "Avatar Name Exactly As In config.py's SCENARIOS": {
@@ -38,42 +42,90 @@ Save it, and it's picked up automatically next time you run the tool.
 Run "python core/check_personas.py" first to catch common mistakes.
 
 A FEW NOTES:
-- A file whose name starts with an underscore (e.g. _template.py) is
-  skipped automatically - handy for keeping a blank template or scratch
-  notes around without it being treated as a real avatar.
-- If two avatar files accidentally use the exact same avatar name, the
-  one loaded later silently wins - this loader will print a warning if
-  that happens, so you'll notice.
-- If an avatar file has a typo or syntax error, Python's own error
-  message will point you straight to the exact file and line - open it
-  in Notepad and fix it the same way you always have.
+- The folder name is just a folder name. The avatar name that has to match
+  config.py is the KEY of the PERSONAS dict inside the file, not the folder.
+- A folder whose name starts with an underscore (e.g. avatars/_TEMPLATE) is
+  skipped automatically - which is what keeps the blank template from being
+  treated as a real avatar.
+- An avatar folder with no personas.py is fine. It just means no personas have
+  been written for it yet; nothing else is affected.
+- If two avatar files accidentally use the exact same avatar name, the one
+  loaded later silently wins - this loader will print a warning if that
+  happens, so you'll notice.
+- If an avatar file has a typo or syntax error, Python's own error message will
+  point you straight to the exact file and line.
 """
 
-import importlib
-import pkgutil
+import importlib.util
+import pathlib
+import sys
 
 PERSONAS = {}
 
 # Per-avatar EXPECTATIONS, keyed by avatar name exactly like PERSONAS. Read by
-# core/judge.py so the judge model can check a conversation against what that persona
-# was supposed to produce. An avatar file without an EXPECTATIONS dict simply
-# isn't judged - the runner and every other avatar are unaffected.
+# core/judge.py so the judge model can check a conversation against what that
+# persona was supposed to produce. An avatar file without an EXPECTATIONS dict
+# simply isn't judged - the runner and every other avatar are unaffected.
 EXPECTATIONS = {}
 
-for _finder, _module_name, _is_pkg in pkgutil.iter_modules(__path__):
-    if _module_name.startswith("_"):
+# folder name -> the loaded module, for tools that need to enumerate avatars
+# (core/check_personas.py, core/export_portal_personas.py) rather than just
+# read the combined dicts above.
+MODULES = {}
+
+_AVATARS_DIR = pathlib.Path(__file__).resolve().parent / "avatars"
+
+
+def path_for(folder_name):
+    """Where an avatar's personas file lives, for use in messages."""
+    return f"avatars/{folder_name}/personas.py"
+
+
+def load(name):
+    """Find one avatar module by folder name, case-insensitively.
+
+    Returns (folder_name, module), or (None, None) if there's no match.
+    """
+    for folder, module in MODULES.items():
+        if folder.lower() == name.lower():
+            return folder, module
+    return None, None
+
+
+def _load_one(folder_name, file_path):
+    """Import avatars/<folder>/personas.py under a unique module name.
+
+    The unique name matters: every one of these files is called personas.py, so
+    importing them all as "personas" would make them overwrite each other - and
+    would collide with this file.
+    """
+    mod_name = f"_avatar_personas_{folder_name}"
+    spec = importlib.util.spec_from_file_location(mod_name, file_path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[mod_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+for _folder in sorted(_AVATARS_DIR.iterdir() if _AVATARS_DIR.is_dir() else []):
+    if not _folder.is_dir() or _folder.name.startswith("_"):
         continue  # skipped on purpose - see the note above
 
-    _module = importlib.import_module(f".{_module_name}", package=__name__)
+    _file = _folder / "personas.py"
+    if not _file.is_file():
+        continue  # an avatar folder with no personas written yet
+
+    _module = _load_one(_folder.name, _file)
+    MODULES[_folder.name] = _module
 
     if not hasattr(_module, "PERSONAS"):
-        print(f"  (personas/{_module_name}.py doesn't define a PERSONAS dict - skipping it.)")
+        print(f"  ({path_for(_folder.name)} doesn't define a PERSONAS dict - skipping it.)")
         continue
 
     for _avatar_name in _module.PERSONAS:
         if _avatar_name in PERSONAS:
-            print(f"  WARNING: '{_avatar_name}' is defined in more than one file under personas/ - "
-                  f"the one from {_module_name}.py is the one that'll be used.")
+            print(f"  WARNING: '{_avatar_name}' is defined in more than one avatars/*/personas.py - "
+                  f"the one from {path_for(_folder.name)} is the one that'll be used.")
 
     PERSONAS.update(_module.PERSONAS)
 

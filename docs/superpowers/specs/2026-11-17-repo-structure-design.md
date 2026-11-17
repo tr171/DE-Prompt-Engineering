@@ -228,3 +228,66 @@ All 16 entry points resolve their imports when invoked as `python <path>`;
 `core/check_personas.py` reports 0 errors; and `core/analyze_run.py` run against
 `avatars/gladys/runs/qa_20261116_162652.xlsx` produces its full five-check
 report, still catching the known Trap Test defect (39/40 against a 28-33 band).
+
+## Second revision: persona files moved into the avatar folders
+
+After the engine move, `avatars/` held four folders while `config.py` listed
+sixteen avatars. The twelve without folders had persona files but no QA
+material, so the structure was accurate — but it read as though only four
+avatars existed, and there was nowhere obvious to start work on the rest.
+
+Creating twelve empty folders would not have survived a push: git does not
+track empty directories. The fix instead was to give every avatar folder real
+content by moving its persona file in:
+
+    personas/Tony.py   ->  avatars/tony/personas.py
+    personas/Gladys.py ->  avatars/gladys/personas.py
+    personas/_TEMPLATE.py -> avatars/_TEMPLATE/personas.py
+    ... 16 in all
+
+Now `avatars/` lists every avatar in `config.py`, each folder is tracked
+because it contains a real file, and everything about one avatar — personas,
+prompts, runs, findings, tools — sits in one place.
+
+### The loader
+
+`personas/__init__.py` became `personas.py` at the repo root. It scans
+`avatars/*/personas.py` and loads each one under a unique module name
+(`_avatar_personas_<folder>`) via `importlib.util.spec_from_file_location`.
+The unique name matters: all sixteen files are called `personas.py`, so
+importing them under their own name would make them overwrite each other and
+collide with the loader itself.
+
+It keeps the same public API — `PERSONAS`, `EXPECTATIONS`, `ROUNDS`,
+`MAX_TURNS_BEFORE_COACHING`, `MAX_MENTORING_TURNS`, `COACHING_REQUEST_MESSAGE`,
+`MENTORING_FOLLOWUP_PROMPT` — so `core/run_qa_tests.py`, `core/judge.py` and
+`core/analyze_run.py` needed no changes at all.
+
+It lives at the repo root rather than in `core/` because it holds the shared
+settings people actually edit (`ROUNDS` and the turn caps). `core/` reads as
+"the engine, don't touch", which is the wrong signal for a file with tunable
+settings in it.
+
+Two scripts walked the old package with `pkgutil.iter_modules` and had to be
+reworked: `core/check_personas.py` and `core/export_portal_personas.py`. The
+loader now exposes `MODULES` (folder name -> module), `load(name)` for
+case-insensitive lookup and `path_for(folder)` for messages, so neither script
+needs to know how avatars are stored.
+
+### Naming
+
+The folder name is not authoritative. The avatar name that must match
+`config.py` is the key of the `PERSONAS` dict inside the file, which is why
+`avatars/maya/personas.py` holds "Maya - Behavioral Health - Moderate". A
+folder whose name starts with `_` is skipped, which is what keeps
+`avatars/_TEMPLATE/` from being treated as a real avatar.
+
+### Verified
+
+The loader finds all 16 avatars, 16 EXPECTATIONS and 16 modules;
+`core/check_personas.py` reports 0 errors across all 16 and still produces its
+two pre-existing warnings (John's `RUN_SET` left on "v22", JordanDiff's Medium
+Learner wording); single-avatar and bad-name lookups behave correctly;
+`core/export_portal_personas.py Gladys` regenerates `PORTAL_PERSONAS.md`
+byte-identically apart from the source-path line in its header; and
+`core/analyze_run.py` runs end to end, which exercises `EXPECTATIONS` loading.

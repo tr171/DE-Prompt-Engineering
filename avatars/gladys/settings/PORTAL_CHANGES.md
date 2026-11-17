@@ -135,6 +135,6 @@ asks loses points twice for one gap, which is why Trap Test is predicted at 28â€
 ## Next: the Personas tab
 
 See `PORTAL_PERSONAS.md` in this folder for all 11 personas with every QA Lab field
-filled in. That file is generated from `personas/Gladys.py` by
+filled in. That file is generated from `avatars/gladys/personas.py` by
 `python core/export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md`
 â€” regenerate it rather than editing by hand.

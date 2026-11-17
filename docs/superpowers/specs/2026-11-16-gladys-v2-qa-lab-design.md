@@ -19,11 +19,11 @@ The QA lab exposes three model slots that this Python tool does not currently mi
 
 Separately, a new Gladys avatar has been authored for Better Path AI V2
 (Alzheimer's Senior Care / New Caregiver Introduction). The existing
-`personas/Gladys.py` targets an older V2.7 build and does not transfer.
+`avatars/gladys/personas.py` targets an older V2.7 build and does not transfer.
 
 ## 2. Goals
 
-1. Rewrite `personas/Gladys.py` against the V2 avatar settings, following `personas/_TEMPLATE.py`.
+1. Rewrite `avatars/gladys/personas.py` against the V2 avatar settings, following `avatars/_TEMPLATE/personas.py`.
 2. Give `config.py` the same three model slots as the QA lab UI.
 3. Add a judge stage that grades each conversation against the persona's `EXPECTATIONS`.
 
@@ -80,14 +80,14 @@ first. Left unfixed it would read as a broken setup rather than a payload incomp
 literals, so it follows if they ever change. Importing that module is safe: everything
 in it sits behind a `__main__` guard.
 
-**The old Gladys file's coaching gate is dead under V2.** `personas/Gladys.py` line 70
+**The old Gladys file's coaching gate is dead under V2.** `avatars/gladys/personas.py` line 70
 gates follow-up questions on the coach saying `"you receive a ... out of 10"`. The V2
 evaluation format emits `Overall Score: X/100` and `Score: X/25`. The gate would never
 fire, silently killing every persona's follow-up phase.
 
 ---
 
-## 5. Part 1 - `personas/Gladys.py`
+## 5. Part 1 - `avatars/gladys/personas.py`
 
 Full rewrite. The V2.7 file is archived to `avatars/gladys/archive/personas_v2.7.py`
 (outside `personas/`, so the loader cannot pick it up as a duplicate avatar).
@@ -209,7 +209,7 @@ Group by `(Avatar, Round, Persona)`. Within a group:
 
 ### 7.2 Loader change
 
-`personas/__init__.py` currently collects only `PERSONAS`. It gains a parallel
+`personas.py` currently collects only `PERSONAS`. It gains a parallel
 `EXPECTATIONS` dict keyed by avatar name, populated from each module's `EXPECTATIONS`
 if present. Avatars without one are simply skipped by the judge.
 
@@ -236,7 +236,7 @@ Actual Score, Verdict, Failed Checks, Quoted Evidence.
 ## 8. Acceptance criteria
 
 1. `python core/check_personas.py` passes with the new Gladys file.
-2. `personas/Gladys.py` exposes `PERSONAS` keyed exactly `"Gladys"`, matching `config.py`.
+2. `avatars/gladys/personas.py` exposes `PERSONAS` keyed exactly `"Gladys"`, matching `config.py`.
 3. A learner call on `gpt-6-luna` succeeds (no HTTP 400 from `temperature`).
 4. The avatar request carries `model: "gpt-5.4-mini"`.
 5. A judge run produces one verdict row per `(Avatar, Round, Persona)` group.

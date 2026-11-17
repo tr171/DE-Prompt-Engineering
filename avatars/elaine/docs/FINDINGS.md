@@ -76,7 +76,7 @@ behaviour. Judge coaching from portal runs only.**
 **9, 8, 8.3, 7.7** — above band in all four rounds. The reason is visible in the
 categories: Medium took **Empathy 10 and Communication 10 in every single
 round**, the same as High. Only CARES separated them. This is the same complaint
-recorded in `personas/Elaine.py` back in October against the old build, so the
+recorded in `avatars/elaine/personas.py` back in October against the old build, so the
 rewrite has not fixed it. High, Low and Trap all sat in band.
 
 **2. Quotes are attributed to the wrong person, constantly.** The commonest form
@@ -336,7 +336,7 @@ told "Never say a total". A portal run would report "no parseable scores" for
 every round. Either the analyser gains a second pattern, or the prompt emits a
 total.
 
-`personas/Elaine.py` is still written against the V5.6 rubric — numbered items
+`avatars/elaine/personas.py` is still written against the V5.6 rubric — numbered items
 (1.1, 2.1, 3.1), different gates, bands worked out from the old scoring. Its
 EXPECTATIONS need rewriting against this prompt before a portal run can be
 judged.

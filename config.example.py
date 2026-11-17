@@ -98,12 +98,12 @@ SCENARIOS = {
     },
     "Ross": {"scenario_id": 194, "agent_id": 190, "model": AVATAR_MODEL},
     "Marcus": {"scenario_id": 142, "agent_id": 138, "model": AVATAR_MODEL},
-    # The QA lab's "Gladys - Test" avatar, which is the V2 build personas/Gladys.py
+    # The QA lab's "Gladys - Test" avatar, which is the V2 build avatars/gladys/personas.py
     # targets. Confirmed 2026-11-16: opens "Oh, I wasn't expecting you." and its
     # coaching emits the V2 format ("Overall Score: X/40" / "- Score: X/10").
     "Gladys": {"scenario_id": 244, "agent_id": 240, "model": AVATAR_MODEL},
     # The older production Gladys. Still live, but it emits the V2.7 coaching format
-    # ("you receive a N out of 10") with no Overall Score line, so personas/Gladys.py
+    # ("you receive a N out of 10") with no Overall Score line, so avatars/gladys/personas.py
     # and core/judge.py do not fit it. Kept here only so the ids are not lost.
     # "Gladys (production V2.7)": {"scenario_id": 190, "agent_id": 186, "model": AVATAR_MODEL},
     "Elaine": {"scenario_id": 189, "agent_id": 185, "model": AVATAR_MODEL},

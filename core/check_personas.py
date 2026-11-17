@@ -1,13 +1,13 @@
 """
 Better Path AI QA - Persona File Checker
 ----------------------------------------
-Checks every avatar file in the personas folder against the standard layout
-(personas/_TEMPLATE.py) and config.py, and prints what to fix. It never
+Checks every avatars/*/personas.py against the standard layout
+(avatars/_TEMPLATE/personas.py) and config.py, and prints what to fix. It never
 calls OpenAI or Better Path AI and never changes any file.
 
 Usage (run from the repo root):
     python core/check_personas.py              check every avatar file
-    python core/check_personas.py Ross         check one file (name without .py)
+    python core/check_personas.py ross         check one avatar (its folder name)
 
 ERRORS stop an avatar from running correctly. WARNINGS are things to fix
 when you next work on that avatar (most are Batch 2 work).
@@ -21,8 +21,6 @@ import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
 # --------------------------------------------------------------------------
 
-import importlib
-import pkgutil
 import re
 import sys
 
@@ -49,9 +47,9 @@ def load_scenarios():
         return None
 
 
-def check_module(mod_name, scenarios):
+def check_module(folder, scenarios):
     errors, warnings = [], []
-    mod = importlib.import_module(f"personas.{mod_name}")
+    mod = personas.MODULES[folder]
 
     if not hasattr(mod, "PERSONAS"):
         return [f"no PERSONAS dict - the tool skips this file"], []
@@ -63,7 +61,7 @@ def check_module(mod_name, scenarios):
 
     for attr in ("RUN_SET", "LIBRARY", "RUN_SETS", "SHARED_CONTEXT", "EXPECTATIONS"):
         if not hasattr(mod, attr):
-            errors.append(f"missing {attr} - copy the layout from personas/_TEMPLATE.py")
+            errors.append(f"missing {attr} - copy the layout from avatars/_TEMPLATE/personas.py")
     if errors:
         return errors, warnings
 
@@ -128,24 +126,24 @@ def check_module(mod_name, scenarios):
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else None
     scenarios = load_scenarios()
-    names = [m for _f, m, _p in pkgutil.iter_modules(personas.__path__) if not m.startswith("_")]
+    names = list(personas.MODULES)
     if only:
         names = [n for n in names if n.lower() == only.lower()]
         if not names:
-            print(f"No personas/{only}.py found.")
+            print(f"No avatars/{only}/personas.py found.")
             sys.exit(1)
 
     total_errors = 0
     seen_keys = set()
-    for mod_name in sorted(names, key=str.lower):
+    for folder in sorted(names, key=str.lower):
         try:
-            errors, warnings = check_module(mod_name, scenarios)
+            errors, warnings = check_module(folder, scenarios)
         except Exception as e:
             errors, warnings = [f"could not load: {e.__class__.__name__}: {e}"], []
-        mod = sys.modules.get(f"personas.{mod_name}")
+        mod = personas.MODULES.get(folder)
         seen_keys.update(getattr(mod, "PERSONAS", {}).keys())
         status = "OK" if not errors and not warnings else ("ERRORS" if errors else "warnings")
-        print(f"personas/{mod_name}.py - {status}")
+        print(f"{personas.path_for(folder)} - {status}")
         for e in errors:
             print(f"   ERROR:   {e}")
         for w in warnings:

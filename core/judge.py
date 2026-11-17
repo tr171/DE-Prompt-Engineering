@@ -19,7 +19,7 @@ That reads the "Transcripts" sheet, judges every conversation in it, and adds a
 
 WHAT IT NEEDS
 
-The avatar's persona file must define an EXPECTATIONS dict (see personas/Gladys.py
+The avatar's persona file must define an EXPECTATIONS dict (see avatars/gladys/personas.py
 for the format). Avatars without one are skipped with a note - nothing breaks.
 
 WHICH MODEL IT USES
