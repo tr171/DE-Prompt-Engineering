@@ -16,7 +16,7 @@ Either way, the tool doesn't stop there — it mirrors what a real learner does 
 We confirmed the avatar side works by testing it live against Madison - Behavioral Health together: it responded normally to typed text, in full context, with no voice involved.
 
 This came with:
-- `config.py` — your credentials and the list of avatars you're testing
+- `config/settings.py` — your credentials and the list of avatars you're testing
 - `avatars/<name>/personas.py` — one per avatar (e.g. `avatars/tony/personas.py`), holding that avatar's learner personas and expectations. A blank `avatars/_TEMPLATE/` is there to copy for new avatars. See Step 6.
 - `personas.py` — combines every avatar's file into one list for the tool, and holds the few settings shared across all of them (how many rounds, the turn caps, the coaching phrase). You edit it to change those settings; you never edit it to add an avatar.
 - `core/check_personas.py` — checks every avatar file for common mistakes before you run (Step 6)
@@ -28,7 +28,7 @@ This came with:
 - `avatars/<name>/` — everything specific to one avatar: the prompts you paste into the portal, the results of past runs, the findings written up, and in `tools/` any scripts that only make sense for that avatar
 - `requirements.txt` — the two small libraries it needs
 
-**Run every command from this top folder**, giving the full path — `python core/run_qa_tests.py`, not `cd core` first. Each script finds `config.py` and `personas.py` on its own from there.
+**Run every command from this top folder**, giving the full path — `python core/run_qa_tests.py`, not `cd core` first. Each script finds `config/settings.py` and `personas.py` on its own from there.
 
 ## Important: about your credentials
 
@@ -37,7 +37,7 @@ This tool needs two separate sets of credentials:
 1. **Better Path AI** — proves to the avatar platform that it's you. Until engineering sets you up with a proper API/service credential, the workaround is: you copy your *own* already-logged-in session's credentials out of Chrome yourself.
 2. **OpenAI** — lets the tool generate learner replies. You'll need an API key and a model name from whoever manages your org's OpenAI account.
 
-I never see either of these — they stay in `config.py` on your computer. Treat that file like a password once it's filled in: don't email it, don't upload it to a shared drive, don't paste it into Slack/Teams, don't commit it anywhere.
+I never see either of these — they stay in `config/settings.py` on your computer. Treat that file like a password once it's filled in: don't email it, don't upload it to a shared drive, don't paste it into Slack/Teams, don't commit it anywhere.
 
 ## Step 0: Check Python is installed
 
@@ -58,7 +58,7 @@ Unzip the download into that folder. You should end up with this layout — note
 
 ```
 bpai-qa-automation\
-    config.py
+    config/settings.py
     core/learner_ai.py
     core/run_qa_tests.py
     core/check_personas.py
@@ -74,7 +74,7 @@ bpai-qa-automation\
         ... one file per avatar
 ```
 
-`config.py` isn't in the download. It holds your credentials, so keep your own copy and never replace it with anything sent to you.
+`config/settings.py` isn't in the download. It holds your credentials, so keep your own copy and never replace it with anything sent to you.
 
 **A note on file names:** the code files in this download are named `.txt` instead of `.py` (e.g. `run_qa_tests.txt`, and inside the `personas` subfolder `__init__.txt`, `Tony.txt`, and so on). That's deliberate: a lot of corporate security software blocks `.py` files from being downloaded or emailed at all. You need to rename them back before they'll work. Open Command Prompt, `cd` into your folder, and run these lines:
 
@@ -117,7 +117,7 @@ Leave `requirements.txt` and `GUIDE.md` exactly as they are — those are suppos
    https://de.better-path-ai.com/api/chat/session?user_id=114&scenario_id=77&agent_id=73
    ```
 6. Note the numbers after `user_id=`, `scenario_id=`, and `agent_id=`.
-7. Open `config.py`:
+7. Open `config/settings.py`:
    - Set `USER_ID` to your `user_id` number (only need to do this once — it's the same for every avatar).
    - Add a line under `SCENARIOS` for this avatar with its `scenario_id` and `agent_id` (there's already a filled-in example for Madison to copy the pattern from).
 8. Repeat steps 3–7 for every avatar situation you want to be able to test. You only need to do this once per avatar, ever — the IDs don't change.
@@ -136,8 +136,8 @@ Leave `requirements.txt` and `GUIDE.md` exactly as they are — those are suppos
    });
    ```
 3. Find the part that reads `headers: { ... }` and copy everything **inside** those curly braces.
-4. Open `config.py`, find the line `HEADERS = {` under the Better Path AI section, and paste what you copied between its curly braces, replacing the placeholder comment.
-5. Save `config.py`.
+4. Open `config/settings.py`, find the line `HEADERS = {` under the Better Path AI section, and paste what you copied between its curly braces, replacing the placeholder comment.
+5. Save `config/settings.py`.
 
 You never need to identify which specific header is "the token" — copying the whole headers block grabs everything the API needs in one go.
 
@@ -151,7 +151,7 @@ Ask whoever manages your org's OpenAI account for two things:
 
 This is native OpenAI, not Azure OpenAI — there's no separate "deployment name" to track down here, and no API version to worry about. The model name goes straight into each request.
 
-Open `config.py` and fill in `OPENAI_API_KEY` and `OPENAI_MODEL` with what they give you. Leave `OPENAI_BASE_URL` as the default (`https://api.openai.com/v1`) unless your team specifically told you they route through their own gateway/proxy URL instead — if so, replace it with that URL.
+Open `config/settings.py` and fill in `OPENAI_API_KEY` and `OPENAI_MODEL` with what they give you. Leave `OPENAI_BASE_URL` as the default (`https://api.openai.com/v1`) unless your team specifically told you they route through their own gateway/proxy URL instead — if so, replace it with that URL.
 
 **Before moving to Step 6, run the quick connection test:**
 ```
@@ -163,7 +163,7 @@ This sends one trivial request and tells you immediately whether your key and mo
 
 Each avatar has its own folder under `avatars/`, and its personas live in that folder as `personas.py` — `avatars/tony/personas.py`, `avatars/ross/personas.py`, `avatars/gladys/personas.py`, and so on. Each file holds everything for that one avatar, and nothing you do in one file affects any other avatar or the rest of the tool.
 
-The folder name is just a folder name. The name that has to match `config.py` is the **key of the `PERSONAS` dict inside the file**, which is why `avatars/maya/personas.py` can hold an avatar called "Maya - Behavioral Health - Moderate".
+The folder name is just a folder name. The name that has to match `config/settings.py` is the **key of the `PERSONAS` dict inside the file**, which is why `avatars/maya/personas.py` can hold an avatar called "Maya - Behavioral Health - Moderate".
 
 As of October 13, 2026 **every avatar file uses the same layout.** `avatars/tony/personas.py` and `avatars/ross/personas.py` are the best worked examples, and `avatars/_TEMPLATE/personas.py` is a blank copy with notes on every part. (Its folder starts with an underscore, so the tool skips it.)
 
@@ -186,7 +186,7 @@ As of October 13, 2026 **every avatar file uses the same layout.** `avatars/tony
    - **Standard four:** High Learner, Medium Learner, Low Learner, Trap Test.
    - **Probes**, always named `Probe - <Behavior>`, such as `Probe - Null` or `Probe - Pusher`. Each probe isolates one behavior.
 6. **`RUN_SETS`** — the named groups `RUN_SET` picks from.
-7. **`PERSONAS`** — what the tool actually reads. **The avatar name here must match `config.py`'s `SCENARIOS` exactly,** or the avatar never shows up as ready.
+7. **`PERSONAS`** — what the tool actually reads. **The avatar name here must match `config/settings.py`'s `SCENARIOS` exactly,** or the avatar never shows up as ready.
 8. **`EXPECTATIONS`** — what a correct result looks like for each persona (scores, what the coaching should say, what counts as an avatar pass or fail). The tool ignores it; it's for reading results.
 9. **`REFERENCE_RUBRIC`** — the rubric and best-practice text, kept for reference. Never sent to the learner AI.
 
@@ -207,15 +207,15 @@ From the tool's folder, run:
 ```
 python core/check_personas.py
 ```
-(or `python core/check_personas.py Ross` for one file). It never calls OpenAI or Better Path AI and never changes anything. It reads every avatar file and `config.py`, then lists:
-- **ERRORS** — things that stop an avatar from running correctly, such as a name that doesn't match `config.py`, rubric text in the context, or a run set naming a persona that doesn't exist.
+(or `python core/check_personas.py Ross` for one file). It never calls OpenAI or Better Path AI and never changes anything. It reads every avatar file and `config/settings.py`, then lists:
+- **ERRORS** — things that stop an avatar from running correctly, such as a name that doesn't match `config/settings.py`, rubric text in the context, or a run set naming a persona that doesn't exist.
 - **warnings** — things to fix next time you work on that avatar, such as an empty Trap Test slot, a persona with no "Please coach me" line, or no expected scores yet.
 
 ### Adding a new avatar
 
 1. Copy `personas\_TEMPLATE.py` and rename the copy to the avatar's name (e.g. `Carol.py`).
 2. Fill in every `<...>` placeholder. Use `Tony.py` or `Ross.py` as the worked example.
-3. Add the avatar to `config.py`'s `SCENARIOS` with exactly the same name (Step 3).
+3. Add the avatar to `config/settings.py`'s `SCENARIOS` with exactly the same name (Step 3).
 4. Run `python core/check_personas.py`, then a 1-round test run (Step 7).
 
 ### Settings shared by every avatar
@@ -233,7 +233,7 @@ python core/check_personas.py
    ```
    python core/run_qa_tests.py
    ```
-2. It lists every avatar that's ready to run (has both an entry in `config.py`'s `SCENARIOS` and at least one filled-in persona prompt in its `avatars/<name>/personas.py`) and asks which ones you want to test today:
+2. It lists every avatar that's ready to run (has both an entry in `config/settings.py`'s `SCENARIOS` and at least one filled-in persona prompt in its `avatars/<name>/personas.py`) and asks which ones you want to test today:
    ```
    Which avatars do you want to test today?
 
@@ -318,7 +318,7 @@ verdict, expected band, reported score, which `avatar should` checks were met,
 which `avatar must not` checks were tripped, and quoted evidence for each.
 
 Unlike Step 8, this one **does** make API calls (one per conversation, using
-`JUDGE_MODEL` from `config.py`), so it costs money and takes a few minutes.
+`JUDGE_MODEL` from `config/settings.py`), so it costs money and takes a few minutes.
 Run Step 8 first; only reach for the judge when you want the detail.
 
 An avatar whose persona file has no `EXPECTATIONS` entry is skipped with a
@@ -354,13 +354,13 @@ because it is generated from the persona file.
 ## Troubleshooting
 
 **"HEADERS is empty" error right away**
-You skipped Step 4, or pasted into the wrong spot, or forgot to save `config.py` afterward.
+You skipped Step 4, or pasted into the wrong spot, or forgot to save `config/settings.py` afterward.
 
 **"USER_ID is not set" error right away**
 Same idea, for Step 3 — `USER_ID` is still `0`.
 
 **"OpenAI isn't configured yet" error**
-You skipped Step 5, or left `OPENAI_API_KEY` or `OPENAI_MODEL` blank in `config.py`.
+You skipped Step 5, or left `OPENAI_API_KEY` or `OPENAI_MODEL` blank in `config/settings.py`.
 
 **An error mentioning a file in the `personas` folder (a `SyntaxError`, or a name it doesn't recognize)**
 Python's error message will point you straight to the exact file and line — open that one file in Notepad and check it against `madison.py`'s pattern. The most common cause is a quote mark or set of triple quotes (`"""`) that doesn't line up right in a `"context"` block, especially after pasting in a long rubric. See the earlier note in this guide about `"""` and stray quotes if you're not sure what to look for.
@@ -423,4 +423,4 @@ Press `Ctrl+C` in the Command Prompt window. Every avatar that already finished 
 
 ## Once you get real API access from engineering
 
-When IT/engineering approves Team-level access and gives you a proper Better Path AI service credential, just swap what's in `config.py`'s `HEADERS` for that instead of your personal session copy. Nothing else about the tool changes. (Your OpenAI setup is separate and unaffected either way.)
+When IT/engineering approves Team-level access and gives you a proper Better Path AI service credential, just swap what's in `config/settings.py`'s `HEADERS` for that instead of your personal session copy. Nothing else about the tool changes. (Your OpenAI setup is separate and unaffected either way.)

@@ -1,7 +1,7 @@
 """
 BPAI QA Automation - OpenAI Connection Test
 ------------------------------------------------
-A quick, standalone check that your OPENAI_* settings in config.py
+A quick, standalone check that your OPENAI_* settings in config/settings.py
 actually work, before running the full tool. Sends one trivial request
 and prints either a success message or a clear explanation of what's
 wrong.
@@ -12,7 +12,7 @@ Usage:
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/test_openai_connection.py` from the repo root. config.py and personas/ live
+# `python core/test_openai_connection.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
@@ -27,7 +27,7 @@ from config import OPENAI_API_KEY, OPENAI_BASE_URL, USER_MODEL as OPENAI_MODEL
 
 def main():
     if not OPENAI_API_KEY or not OPENAI_MODEL:
-        print("ERROR: OPENAI_API_KEY and/or USER_MODEL is still blank in config.py.")
+        print("ERROR: OPENAI_API_KEY and/or USER_MODEL is still blank in config/settings.py.")
         sys.exit(1)
 
     url = f"{OPENAI_BASE_URL}/chat/completions"
@@ -57,10 +57,10 @@ def main():
         data = resp.json()
         reply = data["choices"][0]["message"]["content"]
         print(f"SUCCESS! The model replied: {reply!r}")
-        print("\nYour OpenAI settings in config.py are working. You're good to move on to Step 6.")
+        print("\nYour OpenAI settings in config/settings.py are working. You're good to move on to Step 6.")
     elif resp.status_code == 401:
         print("FAILED (401 Unauthorized): OPENAI_API_KEY is wrong, expired, or missing.")
-        print("Double check what you pasted into config.py against what you were given.")
+        print("Double check what you pasted into config/settings.py against what you were given.")
     elif resp.status_code == 404:
         print(f"FAILED (404 Not Found): the model '{OPENAI_MODEL}' wasn't found, or OPENAI_BASE_URL has a typo.")
         print("Double check the model name your team gave you, and the base URL.")

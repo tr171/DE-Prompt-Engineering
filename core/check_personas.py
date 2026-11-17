@@ -2,7 +2,7 @@
 Better Path AI QA - Persona File Checker
 ----------------------------------------
 Checks every avatars/*/personas.py against the standard layout
-(avatars/_TEMPLATE/personas.py) and config.py, and prints what to fix. It never
+(avatars/_TEMPLATE/personas.py) and config/settings.py, and prints what to fix. It never
 calls OpenAI or Better Path AI and never changes any file.
 
 Usage (run from the repo root):
@@ -15,7 +15,7 @@ when you next work on that avatar (most are Batch 2 work).
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/check_personas.py` from the repo root. config.py and personas/ live
+# `python core/check_personas.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
@@ -42,8 +42,8 @@ def load_scenarios():
     try:
         from config import SCENARIOS
         return SCENARIOS
-    except Exception as e:  # config.py missing or broken - still check the files
-        print(f"(Could not read config.py SCENARIOS: {e.__class__.__name__}. Skipping the name check.)\n")
+    except Exception as e:  # config/settings.py missing or broken - still check the files
+        print(f"(Could not read config/settings.py SCENARIOS: {e.__class__.__name__}. Skipping the name check.)\n")
         return None
 
 
@@ -56,7 +56,7 @@ def check_module(folder, scenarios):
 
     for key in mod.PERSONAS:
         if scenarios is not None and key not in scenarios:
-            errors.append(f'avatar name "{key}" is not in config.py SCENARIOS, so it will never run. '
+            errors.append(f'avatar name "{key}" is not in config/settings.py SCENARIOS, so it will never run. '
                           f"Use exactly the same name in both places.")
 
     for attr in ("RUN_SET", "LIBRARY", "RUN_SETS", "SHARED_CONTEXT", "EXPECTATIONS"):
@@ -153,7 +153,7 @@ def main():
     if scenarios is not None and not only:
         no_file = [n for n in scenarios if n not in seen_keys]
         if no_file:
-            print("\nIn config.py SCENARIOS but no persona file uses that exact name:")
+            print("\nIn config/settings.py SCENARIOS but no persona file uses that exact name:")
             for n in no_file:
                 print(f"   {n}")
 

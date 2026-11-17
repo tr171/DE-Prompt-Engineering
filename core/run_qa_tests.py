@@ -11,7 +11,7 @@ to Excel - one file per avatar, with the avatar's name and a timestamp in
 the file name, even when you run several avatars at once.
 
 Matches the live app (per the Tony findings, Oct 2026):
-- Sends each avatar's OWN model (the "model" in its config.py SCENARIOS
+- Sends each avatar's OWN model (the "model" in its config/settings.py SCENARIOS
   entry), not one model for everyone.
 - Sends the same coaching mode the app does: "before" for the scenario,
   "during" for "Please coach me", and "after" for every follow-up question.
@@ -33,7 +33,7 @@ See GUIDE.md for full setup instructions and troubleshooting.
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/run_qa_tests.py` from the repo root. config.py and personas/ live
+# `python core/run_qa_tests.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
@@ -66,12 +66,12 @@ DELAY_BETWEEN_TURNS = 1.5
 # setting on every message, so the runner has to do the same - otherwise an
 # avatar set to gpt-4o-mini gets tested on a stronger model than learners
 # actually get (this is how Tony looked fine in automation while live
-# sessions broke). Set it per avatar in config.py's SCENARIOS entry, e.g.:
+# sessions broke). Set it per avatar in config/settings.py's SCENARIOS entry, e.g.:
 #     "Tony - Interview": {"scenario_id": 81, "agent_id": 77, "model": "gpt-4o"},
 # To find the right value: capture a real /api/chat/ request for that avatar
 # in DevTools (GUIDE.md troubleshooting) and copy its "model" field exactly -
 # including for any avatar moved to GPT-5.5.
-# This default is only used for an avatar with no "model" in config.py, and
+# This default is only used for an avatar with no "model" in config/settings.py, and
 # the tool prints a warning when that happens.
 DEFAULT_AVATAR_MODEL = "gpt-4o"
 
@@ -469,14 +469,14 @@ def prompt_for_rounds(default_rounds):
 
 def main():
     if not HEADERS:
-        print("ERROR: HEADERS is empty in config.py. See GUIDE.md Step 4.")
+        print("ERROR: HEADERS is empty in config/settings.py. See GUIDE.md Step 4.")
         sys.exit(1)
     if not USER_ID:
-        print("ERROR: USER_ID is not set in config.py. See GUIDE.md Step 3.")
+        print("ERROR: USER_ID is not set in config/settings.py. See GUIDE.md Step 3.")
         sys.exit(1)
 
     # Only offer avatars that are actually ready to run: they need both an
-    # entry in config.py's SCENARIOS (the API ids) and at least one
+    # entry in config/settings.py's SCENARIOS (the API ids) and at least one
     # filled-in persona prompt in their personas/ file. An avatar missing
     # either one can't do anything yet, so there's no point listing it.
     runnable_avatars = [
@@ -486,7 +486,7 @@ def main():
     not_yet_ready = [name for name in SCENARIOS if name not in runnable_avatars]
 
     if not runnable_avatars:
-        print("No avatars are ready to test yet - each one needs both an entry in config.py's")
+        print("No avatars are ready to test yet - each one needs both an entry in config/settings.py's")
         print("SCENARIOS and at least one filled-in persona prompt in its personas/ file.")
         print("See GUIDE.md Steps 3 and 6.")
         sys.exit(1)
@@ -518,7 +518,7 @@ def main():
             model = ids.get("model")
             if not model:
                 model = DEFAULT_AVATAR_MODEL
-                print(f"\n  WARNING: no \"model\" set for '{avatar_name}' in config.py - using {model}. "
+                print(f"\n  WARNING: no \"model\" set for '{avatar_name}' in config/settings.py - using {model}. "
                       "If the avatar is set to a different model in Better Path AI, results won't match "
                       "what learners get. See GUIDE.md Step 3.")
             print(f"\n=== {avatar_name} (model: {model}) ===")
@@ -549,7 +549,7 @@ def main():
         print("If this is from de.better-path-ai.com and says 500 (or another 5xx), the tool already retried a few times "
               "automatically before giving up - that means it's a real, repeated server error worth reporting to your "
               "BPAI engineers, not a one-off blip. See GUIDE.md's troubleshooting section on 5xx errors.")
-        print("If this is from api.openai.com, check your OPENAI_* values in config.py - see GUIDE.md's OpenAI section.")
+        print("If this is from api.openai.com, check your OPENAI_* values in config/settings.py - see GUIDE.md's OpenAI section.")
     except (ValueError, RuntimeError) as e:
         print(f"\nStopped early: {e}")
     finally:

@@ -28,7 +28,7 @@ a block, with the judge fields left blank and a note saying so.
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/export_portal_personas.py` from the repo root. config.py and personas/ live
+# `python core/export_portal_personas.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))

@@ -14,7 +14,7 @@ The QA lab exposes three model slots that this Python tool does not currently mi
 | QA lab slot | Label in the UI | Maps to here |
 |---|---|---|
 | Avatar model (`gpt-5.4-mini`) | "Plays the avatar in every test conversation" | `SCENARIOS[...]["model"]`, sent to BetterPath AI |
-| User model (`gpt-6-luna`) | "Plays each persona" | `OPENAI_MODEL` in `config.py`, used by `core/learner_ai.py` |
+| User model (`gpt-6-luna`) | "Plays each persona" | `OPENAI_MODEL` in `config/settings.py`, used by `core/learner_ai.py` |
 | Judge model (`gpt-6-luna`) | "Checks each conversation against the persona's expectations" | Does not exist yet |
 
 Separately, a new Gladys avatar has been authored for Better Path AI V2
@@ -24,7 +24,7 @@ Separately, a new Gladys avatar has been authored for Better Path AI V2
 ## 2. Goals
 
 1. Rewrite `avatars/gladys/personas.py` against the V2 avatar settings, following `avatars/_TEMPLATE/personas.py`.
-2. Give `config.py` the same three model slots as the QA lab UI.
+2. Give `config/settings.py` the same three model slots as the QA lab UI.
 3. Add a judge stage that grades each conversation against the persona's `EXPECTATIONS`.
 
 ## 3. Non-goals
@@ -174,7 +174,7 @@ Unlike every existing avatar file, this `EXPECTATIONS` is machine-read by the ju
 
 ---
 
-## 6. Part 2 - `config.py` model slots
+## 6. Part 2 - `config/settings.py` model slots
 
 ```python
 AVATAR_MODEL     = "gpt-5.4-mini"  # plays the avatar in every test conversation
@@ -236,7 +236,7 @@ Actual Score, Verdict, Failed Checks, Quoted Evidence.
 ## 8. Acceptance criteria
 
 1. `python core/check_personas.py` passes with the new Gladys file.
-2. `avatars/gladys/personas.py` exposes `PERSONAS` keyed exactly `"Gladys"`, matching `config.py`.
+2. `avatars/gladys/personas.py` exposes `PERSONAS` keyed exactly `"Gladys"`, matching `config/settings.py`.
 3. A learner call on `gpt-6-luna` succeeds (no HTTP 400 from `temperature`).
 4. The avatar request carries `model: "gpt-5.4-mini"`.
 5. A judge run produces one verdict row per `(Avatar, Round, Persona)` group.
@@ -273,6 +273,6 @@ scoring table must be entered before any persona band is typed.
 - **Judge quality depends on how `EXPECTATIONS` is written.** Only Gladys is written to
   the tighter machine-read standard in this round; other avatars' prose entries will
   judge less reliably until rewritten.
-- **`config.py` holds a live bearer token and the repo is not under git.** Nothing in
-  this work changes that, but it is worth noting that the token at `config.py` line 43
+- **`config/settings.py` holds a live bearer token and the repo is not under git.** Nothing in
+  this work changes that, but it is worth noting that the token at `config/settings.py` line 43
   is committed in plaintext to a shared folder.

@@ -15,7 +15,7 @@ are missing in "after" mode.
 
 Usage (run from the repo root):
     python core/probe_after_mode.py            (defaults to Tony)
-    python core/probe_after_mode.py Ross       (any name in config.py SCENARIOS)
+    python core/probe_after_mode.py Ross       (any name in config/settings.py SCENARIOS)
 
 Saves <avatar>_after_mode_probe_<timestamp>.txt in this folder. Upload that file.
 It contains no tokens or keys.
@@ -23,7 +23,7 @@ It contains no tokens or keys.
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/probe_after_mode.py` from the repo root. config.py and personas/ live
+# `python core/probe_after_mode.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
@@ -132,7 +132,7 @@ def run_session(label, scenario_id, agent_id, model, real_app_modes, log):
 def main():
     avatar = sys.argv[1] if len(sys.argv) > 1 else "Tony"
     if avatar not in SCENARIOS:
-        print(f"'{avatar}' isn't in config.py SCENARIOS. Names there: {', '.join(SCENARIOS)}")
+        print(f"'{avatar}' isn't in config/settings.py SCENARIOS. Names there: {', '.join(SCENARIOS)}")
         sys.exit(1)
     ids = SCENARIOS[avatar]
     model = ids.get("model") or DEFAULT_AVATAR_MODEL

@@ -32,7 +32,7 @@ line at the top that picks which personas run. The file ends with a
 module-level PERSONAS dict, which is all this loader needs:
 
     PERSONAS = {
-        "Avatar Name Exactly As In config.py's SCENARIOS": {
+        "Avatar Name Exactly As In config/settings.py's SCENARIOS": {
             "context": SHARED_CONTEXT,
             "personas": _select(RUN_SET),
         },
@@ -43,7 +43,7 @@ Run "python core/check_personas.py" first to catch common mistakes.
 
 A FEW NOTES:
 - The folder name is just a folder name. The avatar name that has to match
-  config.py is the KEY of the PERSONAS dict inside the file, not the folder.
+  config/settings.py is the KEY of the PERSONAS dict inside the file, not the folder.
 - A folder whose name starts with an underscore (e.g. avatars/_TEMPLATE) is
   skipped automatically - which is what keeps the blank template from being
   treated as a real avatar.

@@ -291,3 +291,52 @@ Learner wording); single-avatar and bad-name lookups behave correctly;
 `core/export_portal_personas.py Gladys` regenerates `PORTAL_PERSONAS.md`
 byte-identically apart from the source-path line in its header; and
 `core/analyze_run.py` runs end to end, which exercises `EXPECTATIONS` loading.
+
+## Third revision: config moved into a folder
+
+`config.py` and `config.example.py` became a package:
+
+    config/__init__.py            tracked - a shim, re-exports everything
+    config/settings.example.py    tracked - the template
+    config/settings.py            GITIGNORED - the real token and user id
+
+`from config import SCENARIOS, HEADERS, USER_ID` still works unchanged across
+all 17 entry points, because `config` is now a package whose `__init__.py` does
+`from .settings import *`. Nothing that imports config needed editing.
+
+### Why a shim rather than putting the settings in `__init__.py`
+
+Two reasons. "Copy `settings.example.py` to `settings.py`" is a clearer
+instruction than "copy `example.py` to `__init__.py`". And the shim can catch
+the missing-file case: if `config/settings.py` does not exist, the import
+raises a `SystemExit` explaining exactly what to copy, instead of a bare
+`ModuleNotFoundError`. The shim re-raises any other `ModuleNotFoundError`
+untouched, so a genuine missing dependency inside settings.py is not masked.
+
+### `.env` stayed at the repo root
+
+It is the strongest convention there is for a dotenv file, editors and tools
+look for it there, and moving it would mean every existing checkout has to
+relocate a file holding a live key. `settings.py` now climbs one level out of
+`config/` to find it:
+
+    load_dotenv(os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
+
+Verified by a real OpenAI call: `python core/test_openai_connection.py` returns
+SUCCESS, which only happens if the key was read from the root `.env`.
+
+### .gitignore
+
+`config.py` became `config/settings.py`. Checked after staging that
+`config/settings.py`, `config/settings.py.bak` and `.env` are all untracked,
+and that no live token or key appears anywhere in the staged tree.
+
+### Verified end to end
+
+`python core/run_qa_tests.py` reaches its avatar menu and lists all 16 avatars
+- that exercises config loading, persona loading and the path bootstrap
+together, and is the check that would have caught a path exception.
+`python core/test_openai_connection.py` returns SUCCESS against the live API.
+`core/check_personas.py` reports 0 errors, and `core/analyze_run.py` produces a
+full report from a committed result file.

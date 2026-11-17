@@ -23,7 +23,7 @@ Revision Oct 13, 2026 - Batch 2 (built before the avatar cleanup starts):
   export, and the runner's loader before it can be done safely.
 
 Revision Oct 13, 2026 - Batch 1 (consistency pass; no persona wording changed):
-- FIX: the avatar key was "JD_Meal" but config.py says "JDMeal". The key is now "JDMeal".
+- FIX: the avatar key was "JD_Meal" but config/settings.py says "JDMeal". The key is now "JDMeal".
 - Converted to the combined LIBRARY / RUN_SET format. "Trap Test - Polite Pressure" is now
   "Probe - Polite Pressure"; Null Test replaced with the standard Probe - Null.
 - The after-coaching rules moved out of the shared context into each persona.
@@ -442,7 +442,7 @@ def _select(run_set):
     return {n: LIBRARY[n] for n in names}
 
 
-# What the runner imports. The key must match config.py's SCENARIOS exactly.
+# What the runner imports. The key must match config/settings.py's SCENARIOS exactly.
 PERSONAS = {
     "JDMeal": {
         "context": SHARED_CONTEXT,

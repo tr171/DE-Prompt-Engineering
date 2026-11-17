@@ -426,7 +426,7 @@ def _select(run_set):
     return {n: LIBRARY[n] for n in names}
 
 
-# What the runner imports. The key must match config.py's SCENARIOS exactly.
+# What the runner imports. The key must match config/settings.py's SCENARIOS exactly.
 PERSONAS = {
     "Gladys": {
         "context": SHARED_CONTEXT,

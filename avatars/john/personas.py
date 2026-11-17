@@ -56,7 +56,7 @@ STATUS FOR WHOEVER PICKS THIS UP (Oct 26, 2026)
   (John_V2.2_context.txt, John_V2.2_changes.md).
 - EXPECTATIONS lists "score_band" (the TARGET) and predictions per version. Where they
   disagree, that is a rubric problem to confirm, not a persona problem.
-- The config.py SCENARIOS key must be exactly "John", with John's avatar ID (not JD
+- The config/settings.py SCENARIOS key must be exactly "John", with John's avatar ID (not JD
   Mealtime's) and the model set to the one in the avatar editor.
 
 Scenario type: Persuasion, tiered (playbook 1.4). Purpose tier: practice and confidence.

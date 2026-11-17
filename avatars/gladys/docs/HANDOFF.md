@@ -6,14 +6,14 @@ found so far. Written 2026-11-16.
 ## Setting up (10 minutes)
 
 1. `pip install -r requirements.txt`
-2. Copy `config.example.py` to `config.py`, then fill in two things:
+2. Copy `config/settings.example.py` to `config/settings.py`, then fill in two things:
    - `HEADERS["authorization"]` — your own BetterPath AI token (GUIDE.md Step 4)
    - `USER_ID` — the numeric user id that token belongs to
 3. Copy `.env.example` to `.env` and paste your own OpenAI key (GUIDE.md Step 5)
 4. `python core/test_openai_connection.py` — should print SUCCESS
 5. `python core/check_personas.py` — should print `0 error(s)`
 
-`config.py` and `.env` are gitignored on purpose. They hold live credentials:
+`config/settings.py` and `.env` are gitignored on purpose. They hold live credentials:
 never commit them, never email them, get your own.
 
 ## Running
@@ -31,7 +31,7 @@ portal run can be analysed the same way.
 
 ## The model setup
 
-Three slots in `config.py`, mirroring the QA Lab UI:
+Three slots in `config/settings.py`, mirroring the QA Lab UI:
 
 | Slot | Value | Role |
 |---|---|---|

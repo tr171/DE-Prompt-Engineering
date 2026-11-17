@@ -13,13 +13,13 @@ have happened.
 
 ```bash
 pip install -r requirements.txt
-cp config.example.py config.py    # add your Better Path AI token + user id
+cp config/settings.example.py config/settings.py    # add your Better Path AI token + user id
 cp .env.example .env              # add your own OpenAI key
 python core/test_openai_connection.py  # should print SUCCESS
 python core/check_personas.py          # should print 0 error(s)
 ```
 
-`config.py` and `.env` hold live credentials and are gitignored on purpose.
+`config/settings.py` and `.env` hold live credentials and are gitignored on purpose.
 Never commit them, never email them — get your own.
 
 ## Running
@@ -39,7 +39,7 @@ it into `avatars/<name>/runs/`** — filing it is what makes it tracked.
 ## Layout
 
 ```
-config.example.py  .env.example   copy these to config.py / .env
+config/settings.example.py  .env.example   copy these to config/settings.py / .env
 personas.py                       loads the avatars; shared settings
 core/                             the shared engine
 avatars/<name>/                   everything about one avatar:
@@ -65,7 +65,7 @@ docs/                             cross-avatar notes and design specs
 
 **Run every command from the repo root**, giving the full path —
 `python core/run_qa_tests.py`, not `cd core && python run_qa_tests.py`.
-Each script puts the repo root on its own import path, so `config.py` and
+Each script puts the repo root on its own import path, so `config/settings.py` and
 `personas.py` resolve from wherever it sits.
 
 Shared settings — rounds, turn caps, the `"Please coach me"` trigger — live at
@@ -77,10 +77,10 @@ a folder starting with `_` is skipped, which is what keeps the template out.
 
 ## Avatar roster
 
-All 16 avatars are runnable now — every one has personas and a `config.py` entry.
+All 16 avatars are runnable now — every one has personas and a `config/settings.py` entry.
 The folders listed under *Also has* are the ones with prompt or QA work done so far.
 
-| Folder | Avatar name in `config.py` | Personas | Also has |
+| Folder | Avatar name in `config/settings.py` | Personas | Also has |
 |---|---|---:|---|
 | [`benton/`](avatars/benton/) | Benton | 4 | `archive/`, `prompts/`, `runs/`, `tests/`, `tools/` |
 | [`carol/`](avatars/carol/) | Carol | 4 | — personas only, no QA work yet |

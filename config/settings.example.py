@@ -27,7 +27,7 @@ from dotenv import load_dotenv
 
 # Load secrets from the .env file next to this one, so they can be read
 # with os.getenv() below. Python does not read .env files on its own.
-load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
 BASE_URL = "https://de.better-path-ai.com"
 

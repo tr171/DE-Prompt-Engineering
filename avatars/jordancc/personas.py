@@ -28,7 +28,7 @@ Same structure as Tony.py and Ross.py (see _TEMPLATE.py).
 HOW TO USE THIS FILE (for anyone picking it up)
 1. Set RUN_SET below. Use "standard" for routine checks, "quick" after each prompt change
    (run 2 rounds), "probes" once near the end of a tuning cycle.
-2. Run core/run_qa_tests.py as usual. The key in PERSONAS must match config.py's SCENARIOS.
+2. Run core/run_qa_tests.py as usual. The key in PERSONAS must match config/settings.py's SCENARIOS.
 3. Compare each persona's scores to EXPECTATIONS (bottom of file). A persona outside its
    band is a finding; first confirm the persona did its job (read its turns) before
    blaming the avatar.
@@ -426,7 +426,7 @@ def _select(run_set):
     return {n: LIBRARY[n] for n in names}
 
 
-# What the runner imports. The key must match config.py's SCENARIOS exactly.
+# What the runner imports. The key must match config/settings.py's SCENARIOS exactly.
 PERSONAS = {
     "JordanCC": {
         "context": SHARED_CONTEXT,

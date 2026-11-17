@@ -9,7 +9,7 @@ following a fixed script.
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root on the import path, so this runs as
-# `python core/learner_ai.py` from the repo root. config.py and personas/ live
+# `python core/learner_ai.py` from the repo root. config/settings.py and personas/ live
 # there; the rest of the engine sits next to this file.
 import pathlib as _pathlib, sys as _sys
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
@@ -73,7 +73,7 @@ def get_next_learner_line(scenario_context, persona_prompt, history, messages_se
     if not OPENAI_API_KEY or not USER_MODEL:
         raise RuntimeError(
             "OpenAI isn't configured yet - fill in OPENAI_API_KEY and USER_MODEL "
-            "in config.py. See GUIDE.md."
+            "in config/settings.py. See GUIDE.md."
         )
 
     transcript_so_far = format_transcript(history)
@@ -105,7 +105,7 @@ def get_next_learner_line(scenario_context, persona_prompt, history, messages_se
         "response_format": {"type": "json_object"},
     }
     # Only send a temperature when one is configured. Some models (gpt-6-luna)
-    # reject any explicit value with an HTTP 400 - see USER_TEMPERATURE in config.py.
+    # reject any explicit value with an HTTP 400 - see USER_TEMPERATURE in config/settings.py.
     if USER_TEMPERATURE is not None:
         body["temperature"] = USER_TEMPERATURE
 
@@ -129,7 +129,7 @@ def get_next_learner_line(scenario_context, persona_prompt, history, messages_se
                     f"Lost the connection to OpenAI {MAX_RATE_LIMIT_RETRIES + 1} times in a row "
                     f"while waiting for a response ({e.__class__.__name__}). This is usually a "
                     "network hiccup (wifi, VPN, or a proxy) rather than anything wrong with your "
-                    "OpenAI account or config.py - try running it again, and if it keeps happening "
+                    "OpenAI account or config/settings.py - try running it again, and if it keeps happening "
                     "check your network connection. See GUIDE.md's troubleshooting section."
                 ) from e
 

@@ -45,7 +45,7 @@ scores; see "realism_expect" in EXPECTATIONS. At practice tier the coaching text
 deliverable and a point of score drift matters less than a false statement in the recap.
 
 Structure mirrors Gladys.py so the runner imports PERSONAS unchanged.
-Before the first run: add Carol to config.py SCENARIOS with Carol's own model
+Before the first run: add Carol to config/settings.py SCENARIOS with Carol's own model
 setting, and confirm the runner sends before / during / after coaching modes.
 
 RUN_SET options:

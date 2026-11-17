@@ -13,7 +13,7 @@ three levels score. If the printed score disagrees, the coach did its own maths.
 
 # --- repo bootstrap -------------------------------------------------------
 # Puts the repo root and core/ on the import path, so this runs as
-# `python avatars/elaine/tools/analyze_portal.py` from the repo root. config.py and personas/
+# `python avatars/elaine/tools/analyze_portal.py` from the repo root. config/settings.py and personas/
 # live at the root; the shared engine lives in core/.
 import pathlib as _pathlib, sys as _sys
 _ROOT = _pathlib.Path(__file__).resolve().parents[3]
