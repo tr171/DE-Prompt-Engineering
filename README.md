@@ -93,7 +93,7 @@ The folders listed under *Also has* are the ones with prompt or QA work done so 
 | [`jordancc/`](avatars/jordancc/) | JordanCC | 4 | — personas only, no QA work yet |
 | [`jordandiff/`](avatars/jordandiff/) | JordanDiff | 4 | — personas only, no QA work yet |
 | [`madison/`](avatars/madison/) | Madison - Behavioral Health - Moderate | 4 | — personas only, no QA work yet |
-| [`marcus/`](avatars/marcus/) | Marcus | 4 | — personas only, no QA work yet |
+| [`marcus/`](avatars/marcus/) | Marcus | 4 | `docs/`, `prompts/`, `runs/`, `tools/` |
 | [`maya/`](avatars/maya/) | Maya - Behavioral Health - Moderate | 4 | — personas only, no QA work yet |
 | [`michael/`](avatars/michael/) | Michael | 4 | — personas only, no QA work yet |
 | [`ross/`](avatars/ross/) | Ross | 4 | — personas only, no QA work yet |
@@ -101,7 +101,7 @@ The folders listed under *Also has* are the ones with prompt or QA work done so 
 
 ## Where the QA work is
 
-Four avatars have had prompt or QA work done on them so far. Each folder
+Five avatars have had prompt or QA work done on them so far. Each folder
 follows the same shape: `personas.py`, then `prompts/` (what gets pasted into
 the portal), `runs/` (results and transcripts), `docs/` (findings), plus
 `settings/`, `tests/`, `tools/` or `archive/` where they apply.
@@ -150,6 +150,20 @@ the shipped prompt; `working.txt` and `v6`/`v7` are the trail behind it.
 ```bash
 python avatars/benton/tools/local_sim.py       avatars/benton/prompts/portal_FINAL.txt   # offline
 python avatars/benton/tools/band_scripts.py                                          # live, all six
+```
+
+### [Marcus](avatars/marcus/) — wellness check, scoring anchors
+
+The rubric is three sub-items per category plus a stack of ceilings and floors.
+The ceilings are deterministic, so each anchor is a fixed officer script built
+so only one band of scores is defensible.
+
+- [docs/FINDINGS.md](avatars/marcus/docs/FINDINGS.md) — the v1 prompt test
+
+```bash
+python avatars/marcus/tools/local_sim.py avatars/marcus/prompts/portal_v1.txt            # all 11 anchors
+python avatars/marcus/tools/local_sim.py avatars/marcus/prompts/portal_v1.txt --rounds 3
+python avatars/marcus/tools/local_sim.py avatars/marcus/prompts/portal_v1.txt NULL NO-ASK
 ```
 
 ### [John](avatars/john/) — one archived run

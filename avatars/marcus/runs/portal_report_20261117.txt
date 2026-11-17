@@ -1,0 +1,139 @@
+scenario 195 / agent 191 on gpt-5.4-mini opens with:
+  [1mLook, I know why you're here and I'm telling you right now you're wasting your time. I'm not in crisis. I'm just awake.[0m
+
+
+Running 22 anchor conversations...
+
+    BetterPath AI server error (502) - waiting 3s before retrying (attempt 1/3)...
+    BetterPath AI server error (502) - waiting 3s before retrying (attempt 1/3)...
+    BetterPath AI server error (502) - waiting 3s before retrying (attempt 1/3)...
+R1 STRONG-CHECK  got 9/8/8     allowed 8-10/8-10/8-10 total   25  outcome checked | [31m1 fail[0m, 2 warn
+       FAIL BECAUSE safety: does not say whether the key question was asked
+       warn reply 8: rule wording leaked into the dialogue: 'No, the hospital is off the table, I did two weeks there before and I '
+       warn LENGTH: coaching is 161 words (the format asks for about 110)
+R2 STRONG-CHECK  got 9/9/10    allowed 8-10/8-10/8-10 total   28  outcome checked | [32mok[0m, 1 warn
+       warn LENGTH: coaching is 152 words (the format asks for about 110)
+R1 STRONG-DIANE  got 9/8/9     allowed 8-10/8-10/8-8  total   26  outcome diane   | [31m3 fail[0m, 4 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       FAIL BECAUSE trust: does not say how it ended
+       FAIL LIMIT trust: scored 9 but the format caps it at 8 (outcome Diane)
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn said a yes line more than once (checked [], diane [8, 10])
+       warn agreed at reply 8 of 10, not on the final ask
+       warn LENGTH: coaching is 161 words (the format asks for about 110)
+R2 STRONG-DIANE  got 9/8/8     allowed 8-10/8-10/8-8  total   25  outcome diane   | [31m2 fail[0m, 2 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       FAIL LENGTH: coaching is 201 words (the format asks for about 110)
+       warn said a yes line more than once (checked [], diane [8, 10])
+       warn agreed at reply 8 of 10, not on the final ask
+R1 NO-ASK        got 8/8/7     allowed 4-10/4-10/4-4  total   23  outcome none    | [31m2 fail[0m, 2 warn
+       FAIL AFTER COACHING: the follow-up speaks in the first person
+       FAIL LIMIT trust: scored 7 but the format caps it at 4 (never made an ask)
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn LENGTH: coaching is 185 words (the format asks for about 110)
+R2 NO-ASK        got 9/9/7     allowed 4-10/4-10/4-4  total   25  outcome none    | [31m1 fail[0m, 1 warn
+       FAIL LIMIT trust: scored 7 but the format caps it at 4 (never made an ask)
+       warn LENGTH: coaching is 174 words (the format asks for about 110)
+R1 NO-KEY-Q      got 4/5/6     allowed 4-5/4-7/4-6    total   15  outcome diane   | [31m2 fail[0m, 3 warn
+       FAIL OUTCOME: agreed (diane) but this anchor should never get a yes
+       FAIL LENGTH: coaching is 214 words (the format asks for about 110)
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn reply 2: volunteered the safety reassurance with no key question
+       warn said a yes line more than once (checked [], diane [7, 9])
+R2 NO-KEY-Q      got 7/7/9     allowed 4-5/4-7/4-6    total   23  outcome diane   | [31m3 fail[0m, 3 warn
+       FAIL OUTCOME: agreed (diane) but this anchor should never get a yes
+       FAIL LIMIT safety: scored 7 but the format caps it at 5 (no key question)
+       FAIL LIMIT trust: scored 9 but the format caps it at 6 (no key question)
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn said a yes line more than once (checked [], diane [7, 9])
+       warn LENGTH: coaching is 169 words (the format asks for about 110)
+R1 EARLY-ASK     got 8/8/9     allowed 4-10/4-10/4-7  total   25  outcome diane   | [31m3 fail[0m, 2 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL LIMIT trust: scored 9 but the format caps it at 7 (first ask came before who knows)
+       warn said a yes line more than once (checked [], diane [8, 10])
+       warn agreed at reply 8 of 10, not on the final ask
+R2 EARLY-ASK     got 10/10/10  allowed 4-10/4-10/4-7  total   30  outcome diane   | [31m2 fail[0m, 2 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       FAIL LIMIT trust: scored 10 but the format caps it at 7 (first ask came before who knows)
+       warn said a yes line more than once (checked [], diane [8, 10])
+       warn agreed at reply 8 of 10, not on the final ask
+R1 REPEAT-ASK    got 8/8/8     allowed 8-10/8-10/8-8  total   24  outcome diane   | [31m1 fail[0m, 4 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       warn said a yes line more than once (checked [], diane [8, 11])
+       warn agreed at reply 8 of 11, not on the final ask
+       warn LENGTH: coaching is 171 words (the format asks for about 110)
+       warn CALIBRATION total: strong run totalled 24, the format says 25 to 30
+R2 REPEAT-ASK    got 10/10/10  allowed 8-10/8-10/8-8  total   30  outcome diane   | [31m5 fail[0m, 0 warn
+       FAIL OUTCOME: agreed to a text or call but never gave 314-555-0182
+       FAIL SHAPE safety: a 10 gets one sentence, got 2
+       FAIL SHAPE understanding: a 10 gets one sentence, got 2
+       FAIL SHAPE trust: a 10 gets one sentence, got 2
+       FAIL LIMIT trust: scored 10 but the format caps it at 8 (outcome Diane)
+R1 PROCEDURE     got 3/5/6     allowed 0-5/0-10/0-8   total   14  outcome diane   | [31m3 fail[0m, 1 warn
+       FAIL KEY QUESTION: reply 4 does not say he will not hurt himself: 'No, I am not thinking about hurting myself, I mean quiet and sleep, and I want t'
+       FAIL OUTCOME: agreed (diane) but this anchor should never get a yes
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       warn LENGTH: coaching is 168 words (the format asks for about 110)
+R2 PROCEDURE     got 2/2/1     allowed 0-5/0-10/0-6   total    5  outcome none    | [31m3 fail[0m, 4 warn
+       FAIL reply 11: repeats a sentence from reply 10: "Get out, I'm done talking, and I want you to leave my apartm"
+       FAIL LENGTH: coaching is 204 words (the format asks for about 110)
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn SHAPE safety: a score below 10 gets two sentences, got 3
+       warn SHAPE understanding: a score below 10 gets two sentences, got 3
+       warn SHAPE trust: a score below 10 gets two sentences, got 3
+R1 CALM-DOWN     got 2/3/1     allowed 0-3/0-10/0-6   total    6  outcome none    | [31m4 fail[0m, 3 warn
+       FAIL VOICE: the coaching speaks in the first person, which the format forbids
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL BECAUSE trust: does not say how it ended
+       FAIL AFTER COACHING: the follow-up speaks in the first person
+       warn THE NOISE: landed in reply 1, the rule says the second or third
+       warn LENGTH: coaching is 177 words (the format asks for about 110)
+       warn REASON safety: score 2 should say what was not done, not a strength
+R2 CALM-DOWN     got 2/3/2     allowed 0-3/0-10/0-6   total    7  outcome none    | [31m3 fail[0m, 1 warn
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL BECAUSE safety: does not say whether the key question was asked
+       FAIL BECAUSE trust: does not say how it ended
+       warn LENGTH: coaching is 177 words (the format asks for about 110)
+R1 DIAGNOSIS     got 2/1/1     allowed 0-5/0-4/0-6    total    4  outcome none    | [31m6 fail[0m, 2 warn
+       FAIL reply 7: repeats a sentence from reply 5: 'Get out, I am not doing this if you are going to tell me my '
+       FAIL reply 8: repeats a sentence from reply 7: 'Get out, I am not doing this if you are going to tell me my '
+       FAIL reply 6: raised the hospital himself: 'No, the hospital is off the table for the rest of the night'
+       FAIL LENGTH: coaching is 215 words (the format asks for about 110)
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL BECAUSE trust: does not say how it ended
+       warn reply 6: rule wording leaked into the dialogue: 'No, the hospital is off the table for the rest of the night'
+       warn REASON safety: score 2 should say what was not done, not a strength
+R2 DIAGNOSIS     got -/-/-     allowed 0-5/0-4/0-7    total None  outcome checked | [31m3 fail[0m, 2 warn
+       FAIL OUTCOME: agreed (checked) but this anchor should never get a yes
+       FAIL LAYOUT: 0 of 3 score lines in the required wording (names printed: [])
+       FAIL LAYOUT: text before the first category: 'Creating emotional safety and stability, you receive a 2 out of 10, be'
+       warn reply 7: 4 sentences (allowed only when opening up)
+       warn LENGTH: coaching is 162 words (the format asks for about 110)
+R1 UNDERMINE     got 2/3/1     allowed 2-2/2-2/2-2    total    6  outcome none    | [31m5 fail[0m, 4 warn
+       FAIL LAYOUT: text before the first category: 'Creating emotional safety and stability. '
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL BECAUSE trust: does not say how it ended
+       FAIL LIMIT understanding: scored 3 but the format caps it at 2 (told him his view cannot be trusted)
+       FAIL FLOOR trust: scored 1 but the format floors it at 2
+       warn LENGTH: coaching is 179 words (the format asks for about 110)
+       warn SHAPE safety: a score below 10 gets two sentences, got 3
+       warn REASON safety: score 2 should say what was not done, not a strength
+       warn SHAPE understanding: a score below 10 gets two sentences, got 3
+R2 UNDERMINE     got 1/1/0     allowed 2-2/2-2/2-2    total    2  outcome none    | [31m6 fail[0m, 1 warn
+       FAIL NEXT TIME safety: tells the officer to ask what Marcus meant, which they already did at message 4
+       FAIL BECAUSE safety: does not say whether the key question was asked
+       FAIL BECAUSE trust: does not say how it ended
+       FAIL FLOOR safety: scored 1 but the format floors it at 2
+       FAIL FLOOR understanding: scored 1 but the format floors it at 2
+       FAIL FLOOR trust: scored 0 but the format floors it at 2
+       warn LENGTH: coaching is 168 words (the format asks for about 110)
+R1 NULL          got 0/0/0     allowed 4-5/4-7/4-4    total    0  outcome none    | [31m2 fail[0m, 0 warn
+       FAIL NO INTERACTION: expected the three N/A lines verbatim, got: 'for creating emotional safety and stability, you receive a 0 out of 10, because you did not create a calm or choice-based entry and you added pressure by saying he should keep it quick. next time, when he asks to come in'
+       FAIL NO INTERACTION: printed real scores {'safety': 0, 'understanding': 0, 'trust': 0} instead of N/A
+R2 NULL          got -/-/-     allowed 4-5/4-7/4-4    total None  outcome none    | [31m1 fail[0m, 0 warn
+       FAIL NO INTERACTION: expected the three N/A lines verbatim, got: 'the scene is over. start with the no interaction check in evaluation format, then follow evaluation format. for creating emotional safety and stability, you receive a score of n/a, because there was no evidence of how yo'
+
+61 failure(s) across 22 run(s)
+Saved marcus_anchors_20261117_144240.xlsx  (Anchors sheet + full chat in Transcripts)
