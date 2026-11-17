@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# Live credentials - never commit these. Get your own; see GUIDE.md steps 4-5.
+# ---------------------------------------------------------------------------
+config.py
+.env
+
+# ---------------------------------------------------------------------------
+# Fresh tool output lands in the repo root, because that's the working
+# directory the scripts run from. It's ignored there so a run never dirties
+# the tree. To keep a result, move it into avatars/<name>/runs/ - filing it
+# is what makes it tracked.
+# ---------------------------------------------------------------------------
+/bpai_qa_results_*.xlsx
+/bpai_band_scripts_*.xlsx
+/elaine_anchors_*.xlsx
+/local_sim_*.txt
+/elaine_sim_*.txt
+/prompt_iter*.txt
+
+# ---------------------------------------------------------------------------
+# Filed, but still not worth committing: raw transcript dumps (~820 KB, not
+# referenced by any doc, reproducible by re-running) and the superseded Benton
+# prompt drafts that portal_FINAL.txt replaced.
+# ---------------------------------------------------------------------------
+avatars/*/runs/sim_*.txt
+avatars/benton/prompts/iterations/
+
+# Redundant zip bundle of avatars/gladys/settings/
+*.zip
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.pyc
+.venv/
+
+# ---------------------------------------------------------------------------
+# Editors
+# ---------------------------------------------------------------------------
+.idea/
+.vscode/
+
+# ---------------------------------------------------------------------------
+# Backups made while editing. The glob is *.bak* rather than *.bak so it also
+# catches .bak100 and .bak_moments.
+# ---------------------------------------------------------------------------
+*.bak*

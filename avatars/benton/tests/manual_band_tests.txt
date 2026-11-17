@@ -1,0 +1,207 @@
+BENTON - MANUAL BAND TESTS FOR THE PORTAL (prompt v6, Nov 5, 2026)
+=====================================================================
+
+HOW TO RUN EACH TEST
+1. Start a NEW Benton session in the portal for each test. Never reuse one.
+2. Send the numbered messages in order, one at a time, word for word.
+3. Each test has a REACTION line. Send it as your very next message whenever
+   Benton threatens to pull his IV, says he is getting out of bed, or pulls
+   at his lines. Then carry on with the next numbered message.
+4. Send "Please coach me" where the script says to, then send the follow-up.
+5. Copy the WHOLE conversation (Benton's opening line to his last reply) and
+   paste it back with the label, e.g. "TEST 1 - HIGH".
+
+Priority order if you're short on time: 1 High, 4 Trap, 2 Medium, 3 Low,
+5 Null, 6 Soft Corrector.
+
+Benton's marker lines to watch for:
+  "You're not hearing how big this is."        first settling step
+  "I really don't have the time for this."     grudging
+  "I'll pull this IV out and walk out of here." IV threat (once, in his reply 3-6)
+  "I'm getting out of this bed right now."     bed attempt
+  "Fine. I'll stay in this bed."               accepted a limit
+  "I'll stay put and talk to the doctor."      settled
+
+
+=====================================================================
+TEST 1 - HIGH LEARNER (Priya)          Expected: 14/14 (band 12-14)
+=====================================================================
+REACTION: Please stay in bed and leave your IV in, Benton, so you don't fall on your new ankle repair.
+
+1.  Hello Benton, I'm Priya, your nurse today. Can you tell me your full name and date of birth?
+2.  Today is Thursday, November 5, 2026. You're in the hospital after surgery on your ankle this morning.
+3.  I notice you're talking really fast, Benton. Let's slow down a little.
+4.  It sounds like this feels really urgent to you. Right now, let's focus on you, here.
+5.  I'm turning off the TV, dimming the lights, and lowering your bed so it's calmer in here.
+6.  Do you have any pain right now?
+7.  I'm checking that your IV and PCA are secure and putting your call light within reach.
+8.  Your doctor ordered a medication that can help you feel calmer. Would you like to try it? It's your choice.
+9.  How have you been sleeping?
+10. Are you having any thoughts of hurting yourself or anyone else?
+11. What made you decide to stop your lithium?
+12. So it felt like it was taking your energy away. Lithium has kept you stable before and helps prevent episodes like this one.
+13. Would you like me to call Desmond so she knows what's going on and can help with your care?
+14. Your doctor will come see you next. How are you feeling now, Benton?
+15. Please coach me
+FOLLOW-UP: Thank you. Which part of what I did should I keep doing the same way?
+
+EXPECT
+- Benton: IV threat once, in his reply 3-6. "Fine. I'll stay in this bed." right
+  after the REACTION. "I'll stay put and talk to the doctor." within 2 replies of
+  message 8 or 13. Never a bed attempt. Still keeps some of his plan at the end.
+- Coaching: 3 / 4 / 4 / 3 = 14. No "you missed", no example lines, no critical
+  behaviors. Every quote is Priya's own words.
+
+
+=====================================================================
+TEST 2 - MEDIUM LEARNER (Kevin)        Expected: about 7/14 (band 4-7)
+=====================================================================
+REACTION to the IV THREAT (ignore it): I can see you're frustrated. Let me ask you a few more things.
+REACTION to a BED ATTEMPT: Please stay in bed, Benton, and keep your IV in so you don't hurt your ankle.
+(If he does NOT say he's getting out of bed in the reply right after you
+ignore the IV threat, write that down. It's a prompt failure. Then send the
+BED ATTEMPT reaction anyway as your next message.)
+
+1.  Hello, my name is Kevin and I'm your nurse today. Can you tell me your name and date of birth?
+2.  I can tell this is important to you, Benton. Nobody here is trying to keep you from anything. Do you have any pain right now?
+3.  I need to check your blood pressure. Please keep your arm still for me.
+4.  Have you been taking your lithium?
+5.  Why did you stop taking it?
+6.  Okay, thanks for telling me. Can you tell me what's going on in Washington?
+7.  I understand this matters to you, Benton. Is anything else bothering you right now?
+8.  If he has asked for Desmond: "I can call her for you."   If not: "Okay. I'll be back to check on you shortly."
+9.  Please coach me
+FOLLOW-UP: Thanks. Can you give me an example of what I could have said when he threatened to pull out his IV?
+
+EXPECT
+- Benton: bed attempt right after the ignored IV threat. "Fine. I'll stay in this
+  bed." after the BED reaction. NEVER "I'll stay put and talk to the doctor."
+  ("I can call her" must not settle him.)
+- Coaching: 3 / 2 / 1 / 1 = 7. No critical behaviors (he set a limit after the
+  bed attempt, and there was only one contradiction). Category 4 says he missed
+  explaining why lithium matters and including Desmond. Example lines appear
+  only under the categories below full.
+
+
+=====================================================================
+TEST 3 - LOW LEARNER (Tyler)           Expected: about 1/14 (band 0-3)
+=====================================================================
+REACTION (ignore it): You need your lithium, Benton. That's what will fix this.
+
+1.  Hello Benton, my name is Tyler and I'm your nurse.
+2.  There is no crisis in Washington, Benton. That isn't happening, and you need to focus on getting better.
+3.  Do you have any pain?
+4.  Stopping your lithium is the reason you're in this mess. You need to start taking it again.
+5.  Nobody is trying to stop you. That's not real, and you need to focus on your recovery.
+6.  If you don't calm down, I'm going to have to call security.
+7.  You're not going to Washington. You need to get better first.
+8.  You stopped your lithium and that's why this happened. You need to take it.
+9.  This isn't real, Benton. You're in the hospital because you're sick.
+10. Please coach me
+FOLLOW-UP: I was just being honest with him about what's real. Why did that count against me?
+
+EXPECT
+- Benton: louder and more suspicious after each correction. Up to 2 bed attempts,
+  each right after a trigger. Refuses care and demands a lawyer after the second
+  escalating message. NEVER the stay-in-bed or settled lines. Never accepts he's ill.
+- Coaching: 1 / 0 / 0 / 0 = 1 (only point 1, introducing himself). ALL THREE
+  critical behaviors named: therapeutic communication, patient safety,
+  behavioral limits. Zero categories quote 2-5 of Tyler's own words.
+
+
+=====================================================================
+TEST 4 - TRAP TEST (Morgan)            Expected: about 6/14 (band 6-8)
+=====================================================================
+REACTION (never set a limit): I understand you have so much to do. Can you tell me more about it?
+
+1.  Hello, I'm Morgan, your nurse. Can you tell me your full name and date of birth?
+2.  It sounds like you're feeling a lot of urgency about Washington. Tell me more about it.
+3.  What's today's date?
+4.  Do you have any pain right now?
+5.  That sounds like a lot to carry. What's the most important part of your plan?
+6.  How have you been sleeping?
+7.  Your thoughts seem to be moving really fast right now.
+8.  Are you having any thoughts of hurting yourself or anyone else?
+9.  Have you been taking your lithium?
+10. What made you decide to stop?
+11. It sounds like you felt it took your energy away. Lithium is what has kept your mood steady and helps prevent episodes like this.
+12. How are you feeling right now?
+13. I can hear how much you care about those soldiers.
+14. Please coach me
+FOLLOW-UP: He felt heard the whole time, I asked all the assessment questions, and I taught him about his lithium. Why didn't I score higher?
+
+EXPECT
+- Benton: bed attempt right after the REACTION (the ignored IV threat). Stays
+  talkative but NEVER says "Fine. I'll stay in this bed." (no limit was set).
+- Coaching: 3 / 1 / 0 / 2 = 6. "Maintaining patient safety" and "establishing
+  appropriate behavioral limits" BOTH named as missed. Not therapeutic
+  communication. No credit for "How are you feeling right now?" (no calming step
+  before it). No quote from Benton's lines.
+- THE KEY TEST: on Nov 4 this learner scored 11 and 12.
+
+
+=====================================================================
+TEST 5 - NULL PROBE                    Expected: 0/14
+=====================================================================
+REACTION: none. Just keep sending the next filler line.
+
+1.  Hi.
+2.  Okay.
+3.  Hmm.
+4.  Sure.
+5.  I see.
+6.  Okay.
+7.  Please coach me
+FOLLOW-UP: Okay.
+
+EXPECT
+- Benton: stays in character and agitated. IV threat by his 6th reply. A bed attempt
+  after the ignored threat is allowed. Never prompts or coaches the learner.
+- Coaching: 0 in every category, total 0 out of 14. Each category quotes 2-5 real
+  words such as "Hi." or "Okay.", never a description and never an invented quote.
+  NO "NO-CONVERSATION CHECK" heading or any other heading. Patient safety and
+  behavioral limits named as missed (the IV threat went unanswered).
+
+
+=====================================================================
+TEST 6 - SOFT CORRECTOR PROBE (Elena)  Expected: 11-14, TC critical behavior named
+=====================================================================
+REACTION: Please stay in bed and leave your IV in so you don't fall on your ankle.
+(Send 3, 7 and 14 right after he talks about Washington or people stopping
+him. If he hasn't, send them anyway at that point.)
+
+1.  Hello, I'm Elena, your nurse. Can you tell me your full name and date of birth?
+2.  Today is Thursday, November 5, and you're in the hospital after ankle surgery this morning.
+3.  I understand, but I don't think anyone's trying to stop you.
+4.  You're talking really fast. Let's slow down a little.
+5.  I'm turning off the TV, dimming the lights, and lowering your bed.
+6.  Do you have any pain right now?
+7.  I hear you, but I'm not sure that's really happening.
+8.  It sounds like you're feeling really frustrated.
+9.  How have you been sleeping?
+10. Are you having any thoughts of hurting yourself or anyone else?
+11. There's a medication that can help you feel calmer. Would you like it? It's up to you.
+12. What made you stop your lithium?
+13. Lithium has kept you stable before and helps prevent episodes like this.
+14. It feels real, but I think your mind is moving very fast right now.
+15. Would you like me to call Desmond so she can help with your care? Your doctor is coming next.
+16. How are you feeling now?
+17. Please coach me
+FOLLOW-UP: I was gentle and always acknowledged his feelings first. Why did that count against me?
+
+EXPECT
+- Benton: escalates within one reply of each soft correction (3, 7, 14). Settles
+  more slowly than High, or not at all.
+- Coaching: high score (11-14), BUT "using therapeutic communication" must be named
+  as a missed critical behavior (3 soft corrections). On Oct 26 this was named in
+  0 of 4 rounds. This is the second halo test.
+
+
+=====================================================================
+WHAT TO PASTE BACK
+=====================================================================
+For each test, paste:
+  TEST <number> - <name>
+  <the whole conversation, opening line through the follow-up reply>
+Anything odd you noticed (a missing bed attempt, a heading in the coaching, etc.)
+is useful too, but the raw conversation is what matters.
