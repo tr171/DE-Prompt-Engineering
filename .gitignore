@@ -46,3 +46,7 @@ __pycache__/
 # catches .bak100 and .bak_moments.
 # ---------------------------------------------------------------------------
 *.bak*
+
+# Working notes and design specs - kept locally, not part of the repo.
+# Leading slash: only the top-level docs/, NOT avatars/<name>/docs/.
+/docs/
