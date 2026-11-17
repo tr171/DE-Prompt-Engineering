@@ -6,14 +6,23 @@ automatically. The lines are fixed (no learner AI), and the REACTION line
 is sent automatically whenever Benton threatens his IV or says he's getting
 out of bed, so every run tests exactly the same thing.
 
-Usage (from this folder, with the venv active):
-    python run_band_scripts.py                 all six tests, 1 round
-    python run_band_scripts.py 1 4 6           only tests 1, 4 and 6
-    python run_band_scripts.py --rounds 2      all six, 2 rounds
+Usage (run from the repo root, with the venv active):
+    python avatars/benton/tools/band_scripts.py                 all six tests, 1 round
+    python avatars/benton/tools/band_scripts.py 1 4 6           only tests 1, 4 and 6
+    python avatars/benton/tools/band_scripts.py --rounds 2      all six, 2 rounds
 
 Saves bpai_band_scripts_Benton_<timestamp>.xlsx in the same row layout as
-run_qa_tests.py, with the Persona column set to "Script N - <name>".
+core/run_qa_tests.py, with the Persona column set to "Script N - <name>".
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root and core/ on the import path, so this runs as
+# `python avatars/benton/tools/band_scripts.py` from the repo root. config.py and personas/
+# live at the root; the shared engine lives in core/.
+import pathlib as _pathlib, sys as _sys
+_ROOT = _pathlib.Path(__file__).resolve().parents[3]
+_sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
+# --------------------------------------------------------------------------
 
 import re
 import sys

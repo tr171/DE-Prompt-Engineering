@@ -5,13 +5,21 @@ Checks every avatar file in the personas folder against the standard layout
 (personas/_TEMPLATE.py) and config.py, and prints what to fix. It never
 calls OpenAI or Better Path AI and never changes any file.
 
-Usage (from the same folder as run_qa_tests.py):
-    python check_personas.py              check every avatar file
-    python check_personas.py Ross         check one file (name without .py)
+Usage (run from the repo root):
+    python core/check_personas.py              check every avatar file
+    python core/check_personas.py Ross         check one file (name without .py)
 
 ERRORS stop an avatar from running correctly. WARNINGS are things to fix
 when you next work on that avatar (most are Batch 2 work).
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/check_personas.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
 
 import importlib
 import pkgutil

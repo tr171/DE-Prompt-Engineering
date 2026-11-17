@@ -29,7 +29,7 @@ close tied to the work they want. No persona changes.
 Earlier (V2.9): one specific story per interview, Step 4 skipped when a hard
 moment was already told, shorter coaching (three recap sentences), no tip for Excellent,
 "To be more effective, you could have..." tips. EXPECTATIONS updated. No persona changes.
-Run with the fixed run_qa_tests.py (model per avatar; before/during/after coaching modes).
+Run with the fixed core/run_qa_tests.py (model per avatar; before/during/after coaching modes).
 Follow-up answers will look generic until the platform's after-mode fix ships; judge the
 interview and the coaching only.
 Earlier (V2.8) (frozen for the confirmation phase): coaching tips no

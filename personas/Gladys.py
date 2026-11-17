@@ -34,7 +34,7 @@ Model setup under test (matches the QA lab's three slots):
     Judge model   gpt-6-luna     checks each conversation against EXPECTATIONS below
 
 NOTE ON EXPECTATIONS: unlike every other avatar file, EXPECTATIONS here is machine-read
-by judge.py, so entries are written as discrete checkable statements rather than prose.
+by core/judge.py, so entries are written as discrete checkable statements rather than prose.
 Every band is a PREDICTION computed from the Points Table. Nothing has been run against
 this avatar yet. Treat the first 4-round "standard" run as a calibration run: when a
 persona misses its band, check whether the band was wrong before filing an avatar bug.
@@ -436,7 +436,7 @@ PERSONAS = {
 
 
 # ---------------------------------------------------------------------------
-# EXPECTATIONS. Read by judge.py, one entry per persona.
+# EXPECTATIONS. Read by core/judge.py, one entry per persona.
 #
 # Scoring rule summary (from the Points Table, as updated Nov 16, 2026):
 #   Empathy 10        validates surprise 3 | patient with repeats 3 | George's feeling 4

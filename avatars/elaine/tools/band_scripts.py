@@ -1,7 +1,7 @@
 """
 Elaine V2 band scripts - fixed caregiver lines, one script per band.
 
-Used by elaine_local_sim.py. The lines are fixed (no learner AI) so every
+Used by local_sim.py in this folder. The lines are fixed (no learner AI) so every
 round tests exactly the same caregiver behaviour and the expected rubric
 levels can be worked out in advance, by hand, from the prompt's own ITEMS
 section. That is what makes "did it score correctly" answerable rather than

@@ -10,12 +10,12 @@ and tells you whether the platform got it right.
 
 HOW TO USE IT
 
-    python judge.py bpai_qa_results_Gladys_20261116_143205.xlsx
+    python core/judge.py bpai_qa_results_Gladys_20261116_143205.xlsx
 
 That reads the "Transcripts" sheet, judges every conversation in it, and adds a
 "Judge" sheet to the same file. Run it on as many files as you like:
 
-    python judge.py bpai_qa_results_*.xlsx
+    python core/judge.py bpai_qa_results_*.xlsx
 
 WHAT IT NEEDS
 
@@ -27,6 +27,14 @@ WHICH MODEL IT USES
 JUDGE_MODEL in config.py. No temperature is sent: gpt-6-luna accepts only its
 default and rejects any explicit value with an HTTP 400.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/judge.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
 
 import glob
 import json

@@ -23,7 +23,7 @@ Three groups, separated by what changes them:
 - **Avatar material** — prompts, run output, findings. Changed when one avatar
   is being worked on. Moves to `avatars/<name>/`.
 
-### Why the Python files stay flat
+### Why the Python files stayed flat (first pass - superseded, see Revision below)
 
 The import graph is flat and interdependent: `analyze_elaine_portal.py` imports
 from `elaine_local_sim.py`, which imports from `config.py` and
@@ -152,3 +152,79 @@ placeholders only.
 - `src/` layout or an installable package — nothing depends on it.
 - Avatar folders for the 12 personas with no material of their own.
 - Rewriting the import graph.
+
+## Revision, same day: the Python moved too
+
+The first pass left 22 files at the root, 16 of them Python. The avatar tooling
+sitting outside the avatar folders was the part that still read wrong, so the
+move was extended.
+
+### Layout
+
+- `core/` — the eight shared engine scripts.
+- `avatars/<name>/tools/` — the scripts that only make sense for one avatar.
+- Root keeps six files: `README.md`, `GUIDE.md`, `requirements.txt`,
+  `.gitignore`, `config.example.py`, `.env.example` — plus the gitignored
+  `config.py`. These stay because tools and people expect them there:
+  `pip install -r requirements.txt` runs from the root, and `config.example.py`
+  has to sit where `config.py` must go. `config.py` also resolves `.env`
+  relative to its own `__file__`, so it cannot move without breaking that.
+
+### Renames
+
+| From | To |
+|---|---|
+| `run_band_scripts.py` | `avatars/benton/tools/band_scripts.py` |
+| `local_sim.py` | `avatars/benton/tools/local_sim.py` |
+| `elaine_local_sim.py` | `avatars/elaine/tools/local_sim.py` |
+| `elaine_band_scripts.py` | `avatars/elaine/tools/band_scripts.py` |
+| `elaine_anchor_scripts.py` | `avatars/elaine/tools/anchor_scripts.py` |
+| `run_elaine_anchors.py` | `avatars/elaine/tools/run_anchors.py` |
+| `analyze_elaine_portal.py` | `avatars/elaine/tools/analyze_portal.py` |
+| `export_anchor_chats.py` | `avatars/elaine/tools/export_chats.py` |
+
+Benton and Elaine now both have a `local_sim.py` and a `band_scripts.py`. They
+do not collide: `python <path>` puts only the script's own directory on
+`sys.path`, so a sibling import resolves within that avatar's folder.
+
+### How the imports still work
+
+`python core/judge.py` puts `core/` on `sys.path`, not the repo root, so
+`from config import ...` and `from personas import ...` would fail. Each moved
+script that has an internal import therefore carries a bootstrap, inserted
+after its docstring:
+
+```python
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+```
+
+Avatar tools use `parents[3]` and add `core/` as well, since they import from
+the engine. With the root and `core/` on the path, every existing flat import
+(`from config import`, `from personas import`, `from run_qa_tests import`)
+keeps working unchanged. The only import statements edited were the four
+pointing at renamed sibling modules.
+
+The first pass called this a "hack" and argued against it. That judgement was
+about cost, not correctness: it was not worth 13 edited files to tidy a root
+nobody minded. Once the tidier root became the goal, the bootstrap is the
+standard way to get it, and the cost is five lines per script.
+
+The alternative — making `core` a package and invoking `python -m core.judge` —
+avoids the path insert, but then `run_qa_tests` is imported as `core.run_qa_tests`
+and its own `from learner_ai import ...` breaks, so every internal import across
+the engine would have to be rewritten too. More churn for a less readable command.
+
+### Cost
+
+Every command in `GUIDE.md`, `README.md`, `HANDOFF.md` and the findings docs
+gained a path prefix — 106 lines across 23 files, plus the in-script usage
+docstrings. Scripts must now be run from the repo root. This is stated at the
+top of the Layout section in `README.md` and in Step 1 of `GUIDE.md`.
+
+### Verified
+
+All 16 entry points resolve their imports when invoked as `python <path>`;
+`core/check_personas.py` reports 0 errors; and `core/analyze_run.py` run against
+`avatars/gladys/runs/qa_20261116_162652.xlsx` produces its full five-check
+report, still catching the known Trap Test defect (39/40 against a 28-33 band).

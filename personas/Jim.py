@@ -34,7 +34,7 @@ Revision 10/12/26 (Better Path AI QA, outcome-based rebuild OB1):
 - Low Learner: also bans success, "what matters most", and past-experience questions
   in any form (Sept runs: Low drifted competent and scored 30/30).
 - All personas: hard 45-word cap per message.
-- Shared context: says when the objective counts as reached. learner_ai.py asks the learner
+- Shared context: says when the objective counts as reached. core/learner_ai.py asks the learner
   to judge "the scenario's objective", but the context (after the 10/2 rewrite) never states
   one, so each persona was guessing.
 - High Learner and Efficient Expert: explicit "objective reached" conditions. The turn cap is
@@ -67,7 +67,7 @@ RUN_SET options:
     a list       any persona names from LIBRARY, e.g. ["Trap Test", "Probe - Null"]
 
 Every persona says exactly "Please coach me" when it is time; the runner
-catches that line and sends it as the coaching request (run_qa_tests.py,
+catches that line and sends it as the coaching request (core/run_qa_tests.py,
 Oct 13, 2026). EXPECTATIONS at the bottom is reference only; the runner ignores it.
 """
 

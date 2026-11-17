@@ -13,13 +13,21 @@ Then it asks the same probe questions in both. Each probe checks for
 something only one field contains. Compare A and B to see which fields
 are missing in "after" mode.
 
-Usage (from the same folder as config.py and run_qa_tests.py):
-    python probe_after_mode.py            (defaults to Tony)
-    python probe_after_mode.py Ross       (any name in config.py SCENARIOS)
+Usage (run from the repo root):
+    python core/probe_after_mode.py            (defaults to Tony)
+    python core/probe_after_mode.py Ross       (any name in config.py SCENARIOS)
 
 Saves <avatar>_after_mode_probe_<timestamp>.txt in this folder. Upload that file.
 It contains no tokens or keys.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/probe_after_mode.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
 
 import sys
 import time

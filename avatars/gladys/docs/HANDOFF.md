@@ -10,8 +10,8 @@ found so far. Written 2026-11-16.
    - `HEADERS["authorization"]` — your own BetterPath AI token (GUIDE.md Step 4)
    - `USER_ID` — the numeric user id that token belongs to
 3. Copy `.env.example` to `.env` and paste your own OpenAI key (GUIDE.md Step 5)
-4. `python test_openai_connection.py` — should print SUCCESS
-5. `python check_personas.py` — should print `0 error(s)`
+4. `python core/test_openai_connection.py` — should print SUCCESS
+5. `python core/check_personas.py` — should print `0 error(s)`
 
 `config.py` and `.env` are gitignored on purpose. They hold live credentials:
 never commit them, never email them, get your own.
@@ -19,14 +19,14 @@ never commit them, never email them, get your own.
 ## Running
 
 ```
-python run_qa_tests.py                              # pick Gladys, pick rounds
-python analyze_run.py bpai_qa_results_Gladys_*.xlsx # what went wrong, free
-python judge.py bpai_qa_results_Gladys_*.xlsx       # AI verdicts, costs money
+python core/run_qa_tests.py                              # pick Gladys, pick rounds
+python core/analyze_run.py bpai_qa_results_Gladys_*.xlsx # what went wrong, free
+python core/judge.py bpai_qa_results_Gladys_*.xlsx       # AI verdicts, costs money
 ```
 
 GUIDE.md Steps 7–10 cover all of this in detail.
 
-`analyze_run.py` also reads the QA Lab's own "Download Excel" export, so a
+`core/analyze_run.py` also reads the QA Lab's own "Download Excel" export, so a
 portal run can be analysed the same way.
 
 ## The model setup
@@ -78,7 +78,7 @@ likely needs engineering, not prompt wording.
 
 **2. The coach occasionally fabricates quotes.** It has attributed lines to the
 learner that appear nowhere in the conversation, against an explicit instruction
-not to invent anything. Rare but real. `analyze_run.py` check 5 detects both
+not to invent anything. Rare but real. `core/analyze_run.py` check 5 detects both
 this and misattribution automatically.
 
 ## Portal setup
@@ -92,7 +92,7 @@ this and misattribution automatically.
 `PORTAL_PERSONAS.md` is generated, not hand-written:
 
 ```
-python export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md
+python core/export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md
 ```
 
 Three things that cost us several wasted runs, worth knowing:

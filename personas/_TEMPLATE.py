@@ -3,7 +3,7 @@ TEMPLATE - copy this file to start a new avatar's persona file.
 
 The file name starts with an underscore, so the tool skips it. Copy it,
 rename the copy to the avatar's name (e.g. Carol.py), then fill in every
-<...> placeholder. Run "python check_personas.py" before the first run.
+<...> placeholder. Run "python core/check_personas.py" before the first run.
 
 Layout (same as Tony.py and Ross.py, which are the best worked examples):
     RUN_SET          which personas run this time

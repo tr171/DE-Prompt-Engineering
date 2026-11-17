@@ -1,13 +1,13 @@
 """
 Elaine V2 local simulator + checker
 -----------------------------------
-Runs the fixed band scripts (elaine_band_scripts.SCRIPTS) against an Elaine
+Runs the fixed band scripts (band_scripts.SCRIPTS) against an Elaine
 prompt file using OpenAI directly, instead of the Better Path AI portal. This
 lets you test the prompt before pasting it in. The portal wraps the fields in
 its own template, so ALWAYS confirm the final prompt in the portal afterwards.
 
-    python elaine_local_sim.py avatars/elaine/prompts/portal_v1.txt
-    python elaine_local_sim.py avatars/elaine/prompts/portal_v1.txt --rounds 2 1 3
+    python avatars/elaine/tools/local_sim.py avatars/elaine/prompts/portal_v1.txt
+    python avatars/elaine/tools/local_sim.py avatars/elaine/prompts/portal_v1.txt --rounds 2 1 3
 
 Writes elaine_sim_<timestamp>.txt (full transcripts + check report).
 
@@ -15,6 +15,15 @@ Every check below is a deterministic read of the prompt's own rules, so a
 FAIL is the prompt contradicting itself or the model ignoring it - not an
 opinion about whether the coaching felt fair.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root and core/ on the import path, so this runs as
+# `python avatars/elaine/tools/local_sim.py` from the repo root. config.py and personas/
+# live at the root; the shared engine lives in core/.
+import pathlib as _pathlib, sys as _sys
+_ROOT = _pathlib.Path(__file__).resolve().parents[3]
+_sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
+# --------------------------------------------------------------------------
 
 import re
 import sys
@@ -25,7 +34,7 @@ from datetime import datetime
 import requests
 
 from config import AVATAR_MODEL, OPENAI_API_KEY, OPENAI_BASE_URL
-from elaine_band_scripts import CAREGIVER, SCRIPTS
+from band_scripts import CAREGIVER, SCRIPTS
 
 MODEL = AVATAR_MODEL
 

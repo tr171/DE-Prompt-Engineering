@@ -14,7 +14,7 @@ The QA lab exposes three model slots that this Python tool does not currently mi
 | QA lab slot | Label in the UI | Maps to here |
 |---|---|---|
 | Avatar model (`gpt-5.4-mini`) | "Plays the avatar in every test conversation" | `SCENARIOS[...]["model"]`, sent to BetterPath AI |
-| User model (`gpt-6-luna`) | "Plays each persona" | `OPENAI_MODEL` in `config.py`, used by `learner_ai.py` |
+| User model (`gpt-6-luna`) | "Plays each persona" | `OPENAI_MODEL` in `config.py`, used by `core/learner_ai.py` |
 | Judge model (`gpt-6-luna`) | "Checks each conversation against the persona's expectations" | Does not exist yet |
 
 Separately, a new Gladys avatar has been authored for Better Path AI V2
@@ -42,7 +42,7 @@ These were confirmed by running against the live OpenAI account, not assumed.
 **Both target models exist and are reachable.** `GET /v1/models` returns `gpt-5.4-mini`
 (dated `gpt-5.4-mini-2026-03-17`) and `gpt-6-luna`.
 
-**`gpt-6-luna` rejects the current learner payload.** `learner_ai.py` sends
+**`gpt-6-luna` rejects the current learner payload.** `core/learner_ai.py` sends
 `"temperature": 0.8`. Probe result:
 
 ```
@@ -57,26 +57,26 @@ Since the User model (the persona player) is `gpt-6-luna`, this is a hard blocke
 every learner call would 400 on the first turn. The `temperature` line must become
 conditional before anything else in this spec works.
 
-**`SCENARIOS[...]["model"]` is not a label.** `run_qa_tests.py`'s `send_message` puts it
+**`SCENARIOS[...]["model"]` is not a label.** `core/run_qa_tests.py`'s `send_message` puts it
 in the request body as `{"model": model, "llm_type": "openai"}`. It controls which model
 BetterPath AI runs the avatar and the coach on.
 
 **`gpt-6-luna` also rejects `max_tokens`.** Found while running
-`test_openai_connection.py` after the model swap:
+`core/test_openai_connection.py` after the model swap:
 
 ```
 HTTP 400 - Unsupported parameter: 'max_tokens' is not supported with this model.
            Use 'max_completion_tokens' instead.
 ```
 
-This affects `test_openai_connection.py`, the diagnostic GUIDE.md tells people to run
+This affects `core/test_openai_connection.py`, the diagnostic GUIDE.md tells people to run
 first. Left unfixed it would read as a broken setup rather than a payload incompatibility.
-`learner_ai.py` sets no token cap, so the main path was unaffected. Fixed by switching to
+`core/learner_ai.py` sets no token cap, so the main path was unaffected. Fixed by switching to
 `max_completion_tokens`, which `gpt-4o` and `gpt-5.x` both accept.
 
 **The runner's coaching-mode values are `before` / `during` / `after`,** not the
-`scene` / `coaching` / `followup` names the constants suggest. `judge.py` imports
-`MODE_COACHING` and `MODE_FOLLOWUP` from `run_qa_tests.py` rather than duplicating the
+`scene` / `coaching` / `followup` names the constants suggest. `core/judge.py` imports
+`MODE_COACHING` and `MODE_FOLLOWUP` from `core/run_qa_tests.py` rather than duplicating the
 literals, so it follows if they ever change. Importing that module is safe: everything
 in it sits behind a `__main__` guard.
 
@@ -186,7 +186,7 @@ USER_TEMPERATURE = None            # gpt-6-luna supports only the default; None 
 - `SCENARIOS` entries stop hardcoding `"model": "gpt-4o"` and fall back to `AVATAR_MODEL`,
   with a per-scenario override still possible.
 - `OPENAI_MODEL` remains as an alias for `USER_MODEL` so existing imports keep working.
-- `learner_ai.py` includes `temperature` in the request body only when
+- `core/learner_ai.py` includes `temperature` in the request body only when
   `USER_TEMPERATURE is not None`.
 
 Dropping `temperature=0.8` does not reduce round-to-round variety: luna's enforced
@@ -194,7 +194,7 @@ default of 1 is more varied, not less.
 
 ---
 
-## 7. Part 3 - the judge stage (`judge.py`)
+## 7. Part 3 - the judge stage (`core/judge.py`)
 
 ### 7.1 Input
 
@@ -235,7 +235,7 @@ Actual Score, Verdict, Failed Checks, Quoted Evidence.
 
 ## 8. Acceptance criteria
 
-1. `python check_personas.py` passes with the new Gladys file.
+1. `python core/check_personas.py` passes with the new Gladys file.
 2. `personas/Gladys.py` exposes `PERSONAS` keyed exactly `"Gladys"`, matching `config.py`.
 3. A learner call on `gpt-6-luna` succeeds (no HTTP 400 from `temperature`).
 4. The avatar request carries `model: "gpt-5.4-mini"`.

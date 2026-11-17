@@ -9,13 +9,13 @@ this file.
 You will almost never need to open this file. It exists to:
 
 1. Automatically find every avatar file in this folder and combine them
-   into one PERSONAS dict - the same shape run_qa_tests.py and
-   learner_ai.py have always expected, so neither of them needed to
+   into one PERSONAS dict - the same shape core/run_qa_tests.py and
+   core/learner_ai.py have always expected, so neither of them needed to
    change at all when this split happened.
 2. Hold the handful of settings that apply across EVERY avatar (how many
    rounds to run, the turn caps, the coaching trigger phrase) - see the
    bottom of this file.
-3. Collect each avatar's EXPECTATIONS dict, if it has one, so judge.py can
+3. Collect each avatar's EXPECTATIONS dict, if it has one, so core/judge.py can
    grade a finished conversation against what that persona should have
    produced. Avatar files without one are skipped by the judge and are
    otherwise completely unaffected.
@@ -35,7 +35,7 @@ PERSONAS dict, which is all this loader needs:
     }
 
 Save it, and it's picked up automatically next time you run the tool.
-Run "python check_personas.py" first to catch common mistakes.
+Run "python core/check_personas.py" first to catch common mistakes.
 
 A FEW NOTES:
 - A file whose name starts with an underscore (e.g. _template.py) is
@@ -55,7 +55,7 @@ import pkgutil
 PERSONAS = {}
 
 # Per-avatar EXPECTATIONS, keyed by avatar name exactly like PERSONAS. Read by
-# judge.py so the judge model can check a conversation against what that persona
+# core/judge.py so the judge model can check a conversation against what that persona
 # was supposed to produce. An avatar file without an EXPECTATIONS dict simply
 # isn't judged - the runner and every other avatar are unaffected.
 EXPECTATIONS = {}
@@ -93,7 +93,7 @@ for _finder, _module_name, _is_pkg in pkgutil.iter_modules(__path__):
 ROUNDS = 4
 
 # Safety net, not a target: the AI is supposed to tell us when the
-# scenario's objective has been reached (see learner_ai.py), and that's
+# scenario's objective has been reached (see core/learner_ai.py), and that's
 # what normally ends the objective-seeking part of each conversation.
 # This cap only kicks in if that signal never comes - it stops that part
 # anyway after this many learner turns, so a stuck run can't loop forever

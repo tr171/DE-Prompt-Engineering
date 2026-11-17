@@ -6,7 +6,7 @@ category, run against the live V2 avatar (scenario 169 / agent 165).
 File: `avatars/elaine/runs/anchors_20261116.xlsx` — **Anchors** sheet has target vs
 actual, **Transcripts** sheet has every line of all 15 chats.
 
-Reproduce with `python run_elaine_anchors.py`.
+Reproduce with `python avatars/elaine/tools/run_anchors.py`.
 
 ## Headline: the ends of the scale work, the middle does not
 

@@ -1,7 +1,7 @@
 """
 Turns an anchor run's Transcripts sheet into a readable chat log.
 
-    python export_anchor_chats.py elaine_anchors_<timestamp>.xlsx
+    python avatars/elaine/tools/export_chats.py elaine_anchors_<timestamp>.xlsx
 
 Writes a .md next to it with every conversation in full - each caregiver line,
 each of Elaine's replies, and the coaching she gave at the end - plus the

@@ -44,7 +44,7 @@ RUN_SET options:
     a list       any persona names from LIBRARY, e.g. ["Trap Test", "Probe - Null"]
 
 Every persona says exactly "Please coach me" when it is time; the runner
-catches that line and sends it as the coaching request (run_qa_tests.py,
+catches that line and sends it as the coaching request (core/run_qa_tests.py,
 Oct 13, 2026). EXPECTATIONS at the bottom is reference only; the runner ignores it.
 """
 

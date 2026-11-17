@@ -9,7 +9,7 @@ Never commit or send config.py or .env - they hold live credentials.
 
 BPAI QA Automation - Configuration
 -----------------------------------
-Fill in the values below before running run_qa_tests.py.
+Fill in the values below before running core/run_qa_tests.py.
 
 TREAT THIS FILE LIKE A PASSWORD. It will contain your live BetterPath AI
 session credentials AND your Azure OpenAI key. Don't email it, upload it
@@ -61,11 +61,11 @@ HEADERS = {
 # on - it is not just a label recorded in the results file.
 AVATAR_MODEL = "gpt-5.4-mini"
 
-# Plays each persona. This is our own learner AI in learner_ai.py - the thing
+# Plays each persona. This is our own learner AI in core/learner_ai.py - the thing
 # that acts out High Learner, Trap Test, the probes and so on.
 USER_MODEL = "gpt-6-luna"
 
-# Checks each conversation against the persona's EXPECTATIONS. Used by judge.py.
+# Checks each conversation against the persona's EXPECTATIONS. Used by core/judge.py.
 JUDGE_MODEL = "gpt-6-luna"
 
 # Sampling temperature for the learner AI, or None to leave it off entirely.
@@ -104,7 +104,7 @@ SCENARIOS = {
     "Gladys": {"scenario_id": 244, "agent_id": 240, "model": AVATAR_MODEL},
     # The older production Gladys. Still live, but it emits the V2.7 coaching format
     # ("you receive a N out of 10") with no Overall Score line, so personas/Gladys.py
-    # and judge.py do not fit it. Kept here only so the ids are not lost.
+    # and core/judge.py do not fit it. Kept here only so the ids are not lost.
     # "Gladys (production V2.7)": {"scenario_id": 190, "agent_id": 186, "model": AVATAR_MODEL},
     "Elaine": {"scenario_id": 189, "agent_id": 185, "model": AVATAR_MODEL},
     "JD_Med": {"scenario_id": 114, "agent_id": 191, "model": AVATAR_MODEL},

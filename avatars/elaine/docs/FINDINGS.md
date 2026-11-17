@@ -10,15 +10,15 @@ new prompt could not be tested through the QA Lab. It was tested locally
 instead, the same way the Benton prompt was iterated:
 
 ```
-python elaine_local_sim.py avatars/elaine/prompts/portal_v1.txt --rounds 3
+python avatars/elaine/tools/local_sim.py avatars/elaine/prompts/portal_v1.txt --rounds 3
 ```
 
 - `avatars/elaine/prompts/portal_v1.txt` — the new prompt, verbatim, split into the
   portal's fields and ready to paste.
-- `elaine_band_scripts.py` — seven fixed caregiver scripts (High, Medium, Low,
+- `avatars/elaine/tools/band_scripts.py` — seven fixed caregiver scripts (High, Medium, Low,
   Trap, Null, Overloader, Pusher). Fixed lines, so the rubric levels each
   conversation should earn are worked out in advance by hand.
-- `elaine_local_sim.py` — runs them on `AVATAR_MODEL` (gpt-5.4-mini, what the
+- `avatars/elaine/tools/local_sim.py` — runs them on `AVATAR_MODEL` (gpt-5.4-mini, what the
   portal runs) and checks the result against the prompt's own rules. Every
   check is deterministic; a FAIL is the prompt contradicting itself or the
   model ignoring it, not an opinion about whether the coaching felt fair.
@@ -39,7 +39,7 @@ Run #31: gpt-5.4-mini, 4 personas × 4 rounds = 16 conversations. All 16 emit
 the new `you receive a score of X out of 10` wording, so this is the new build.
 
 ```
-python analyze_elaine_portal.py avatars/elaine/runs/portal_run_31.xlsx
+python avatars/elaine/tools/analyze_portal.py avatars/elaine/runs/portal_run_31.xlsx
 ```
 
 **Three findings from my local harness did NOT reproduce here, and I withdraw
@@ -51,7 +51,7 @@ them as portal defects:**
 | Coaching leaked into the middle of the scene 4 times | **0 times** |
 | Trap Test scored 30/30 | Scored 3–3.7 out of 10, **inside** its 0–4 band |
 
-The portal wraps these fields in its own template — GUIDE.md and `local_sim.py`
+The portal wraps these fields in its own template — GUIDE.md and `avatars/elaine/tools/local_sim.py`
 both warn about exactly this — and that wrapper evidently gets past the
 CHECK FIRST and AFTER COACHING traps that stop the raw prompt locally. Those
 two rules are still badly written, but they are not what is hurting the portal.
@@ -330,7 +330,7 @@ trigger dead, a caregiver who overloads her every turn still scores Did.
 
 ## 8. Tooling
 
-`analyze_run.py` cannot read this format. It looks for `Overall Score: X/Y` and
+`core/analyze_run.py` cannot read this format. It looks for `Overall Score: X/Y` and
 `- Score: X/10`; this prompt emits `you receive a score of X out of 10` and is
 told "Never say a total". A portal run would report "no parseable scores" for
 every round. Either the analyser gains a second pattern, or the prompt emits a
@@ -350,6 +350,6 @@ judged.
    including making CHECK FIRST and AFTER COACHING rule 2 unable to fire on the
    request that triggers coaching. Everything in sections 2 and 3 is unmeasurable
    until coaching happens more than 29% of the time.
-3. Then re-run `elaine_local_sim.py` and work on the gate leaks and
+3. Then re-run `avatars/elaine/tools/local_sim.py` and work on the gate leaks and
    over-crediting.
-4. Only then paste into the portal and run `run_qa_tests.py`.
+4. Only then paste into the portal and run `core/run_qa_tests.py`.

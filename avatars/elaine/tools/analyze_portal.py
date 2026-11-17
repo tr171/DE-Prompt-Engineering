@@ -1,7 +1,7 @@
 """
 Checks an Elaine V2 portal run against the prompt's own coaching rules.
 
-    python analyze_elaine_portal.py avatars/elaine/runs/portal_run_31.xlsx
+    python avatars/elaine/tools/analyze_portal.py avatars/elaine/runs/portal_run_31.xlsx
 
 Reads the QA Lab's "Download Excel" export. Every check is a deterministic
 read of the prompt's own LAYOUT / RECAP / POINTS / REASONS / TIPS sections,
@@ -10,9 +10,18 @@ Scoring correctness is checked the only way it can be checked without a human:
 the recap names the three levels, and the POINTS table says exactly what those
 three levels score. If the printed score disagrees, the coach did its own maths.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root and core/ on the import path, so this runs as
+# `python avatars/elaine/tools/analyze_portal.py` from the repo root. config.py and personas/
+# live at the root; the shared engine lives in core/.
+import pathlib as _pathlib, sys as _sys
+_ROOT = _pathlib.Path(__file__).resolve().parents[3]
+_sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
+# --------------------------------------------------------------------------
 import re, sys, collections
 from openpyxl import load_workbook
-from elaine_local_sim import PHRASES, POINTS, CATEGORIES, FIXED_REASON, norm, sentences, parse_recap, BANNED_CHARS
+from local_sim import PHRASES, POINTS, CATEGORIES, FIXED_REASON, norm, sentences, parse_recap, BANNED_CHARS
 
 RED, GREEN, YELLOW, BOLD, OFF = "\033[31m", "\033[32m", "\033[33m", "\033[1m", "\033[0m"
 

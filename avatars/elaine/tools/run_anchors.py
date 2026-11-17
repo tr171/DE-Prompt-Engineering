@@ -1,18 +1,18 @@
 """
 Elaine V2 scoring anchor run
 -----------------------------
-Runs every anchor in elaine_anchor_scripts.py against the live avatar, then
+Runs every anchor in anchor_scripts.py against the live avatar, then
 saves the scores AND the full chat.
 
-    python run_elaine_anchors.py                 all 15 anchors, 1 round
-    python run_elaine_anchors.py --rounds 2      each anchor twice
-    python run_elaine_anchors.py COMM-10 EMP-0   only these
+    python avatars/elaine/tools/run_anchors.py                 all 15 anchors, 1 round
+    python avatars/elaine/tools/run_anchors.py --rounds 2      each anchor twice
+    python avatars/elaine/tools/run_anchors.py COMM-10 EMP-0   only these
 
 Writes elaine_anchors_<timestamp>.xlsx with two sheets:
     Anchors      one row per run - target score, actual score, what the
                  avatar's own recap implies, and whether they agree
     Transcripts  every line of every conversation, same layout as the QA Lab
-                 export, so analyze_elaine_portal.py reads it unchanged
+                 export, so analyze_portal.py reads it unchanged
 
 Two different things are checked, and they fail for different reasons:
   TARGET   the score the conversation was built to produce vs what came back.
@@ -23,6 +23,15 @@ Two different things are checked, and they fail for different reasons:
            arguable.
 """
 
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root and core/ on the import path, so this runs as
+# `python avatars/elaine/tools/run_anchors.py` from the repo root. config.py and personas/
+# live at the root; the shared engine lives in core/.
+import pathlib as _pathlib, sys as _sys
+_ROOT = _pathlib.Path(__file__).resolve().parents[3]
+_sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
+# --------------------------------------------------------------------------
+
 import re
 import sys
 import time
@@ -32,8 +41,8 @@ from datetime import datetime
 from openpyxl import Workbook
 
 from config import AVATAR_MODEL
-from elaine_anchor_scripts import ANCHORS, ORDER
-from elaine_local_sim import CATEGORIES, POINTS, parse_recap
+from anchor_scripts import ANCHORS, ORDER
+from local_sim import CATEGORIES, POINTS, parse_recap
 from run_qa_tests import (MODE_COACHING, MODE_SCENE, create_simulation,
                           send_message, start_session)
 

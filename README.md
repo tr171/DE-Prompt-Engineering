@@ -15,8 +15,8 @@ have happened.
 pip install -r requirements.txt
 cp config.example.py config.py    # add your Better Path AI token + user id
 cp .env.example .env              # add your own OpenAI key
-python test_openai_connection.py  # should print SUCCESS
-python check_personas.py          # should print 0 error(s)
+python core/test_openai_connection.py  # should print SUCCESS
+python core/check_personas.py          # should print 0 error(s)
 ```
 
 `config.py` and `.env` hold live credentials and are gitignored on purpose.
@@ -25,12 +25,12 @@ Never commit them, never email them — get your own.
 ## Running
 
 ```bash
-python run_qa_tests.py                               # pick an avatar, pick rounds
-python analyze_run.py  bpai_qa_results_<avatar>_*.xlsx   # deterministic checks, free
-python judge.py        bpai_qa_results_<avatar>_*.xlsx   # AI verdicts, costs money
+python core/run_qa_tests.py                               # pick an avatar, pick rounds
+python core/analyze_run.py  bpai_qa_results_<avatar>_*.xlsx   # deterministic checks, free
+python core/judge.py        bpai_qa_results_<avatar>_*.xlsx   # AI verdicts, costs money
 ```
 
-`analyze_run.py` also reads the QA Lab's own "Download Excel" export, so a
+`core/analyze_run.py` also reads the QA Lab's own "Download Excel" export, so a
 portal run can be analysed the same way.
 
 Output lands in the repo root and is gitignored there. **To keep a result, move
@@ -38,16 +38,32 @@ it into `avatars/<name>/runs/`** — filing it is what makes it tracked.
 
 ## Layout
 
+```
+config.example.py  .env.example   copy these to config.py / .env
+core/                             the shared engine
+personas/                         one file per avatar - personas + expectations
+avatars/<name>/                   everything specific to one avatar
+docs/                             cross-avatar notes and design specs
+```
+
 | Path | What it is |
 |---|---|
-| `run_qa_tests.py` | the runner — this is the one you run |
-| `learner_ai.py` | asks OpenAI for each learner line |
-| `judge.py` | grades a finished run against `EXPECTATIONS` |
-| `analyze_run.py` | deterministic checks, no API calls, free |
-| `check_personas.py` | validates every persona file before a run |
+| `core/run_qa_tests.py` | the runner — this is the one you run |
+| `core/learner_ai.py` | asks OpenAI for each learner line |
+| `core/judge.py` | grades a finished run against `EXPECTATIONS` |
+| `core/analyze_run.py` | deterministic checks, no API calls, free |
+| `core/check_personas.py` | validates every persona file before a run |
+| `core/export_portal_personas.py` | turns a persona file into paste-ready portal fields |
+| `core/probe_after_mode.py` | diagnostic: which avatar fields the platform uses after coaching |
+| `core/test_openai_connection.py` | confirms your OpenAI key works |
 | `personas/` | one file per avatar — the personas and expectations |
-| `avatars/` | per-avatar prompts, results and findings (below) |
+| `avatars/<name>/tools/` | scripts that only make sense for that avatar |
 | `docs/` | cross-avatar notes and design specs |
+
+**Run every command from the repo root**, giving the full path —
+`python core/run_qa_tests.py`, not `cd core && python run_qa_tests.py`.
+Each script puts the repo root on its own import path, so `config.py` and
+`personas/` resolve from wherever it sits.
 
 Shared settings — rounds, turn caps, the `"Please coach me"` trigger — live at
 the bottom of [personas/__init__.py](personas/__init__.py).
@@ -72,7 +88,7 @@ Communication, CARES Method, Objective) for 40.
   every portal field, paste-ready
 - [settings/PORTAL_PERSONAS.md](avatars/gladys/settings/PORTAL_PERSONAS.md) —
   all 11 personas with every QA Lab field filled in (generated, not hand-written:
-  `python export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md`)
+  `python core/export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md`)
 
 Open: the coach credits statements of intent ("I'll stop by again soon") as
 return requests, so Trap Test beats its band. Three prompt wordings have failed
@@ -90,9 +106,10 @@ else is a scoring error.
 - [docs/MANAGER_NOTE.md](avatars/elaine/docs/MANAGER_NOTE.md) — the summary written for review
 
 ```bash
-python elaine_local_sim.py     avatars/elaine/prompts/portal_v1.txt   # iterate offline
-python run_elaine_anchors.py                                          # 15 anchors, live
-python analyze_elaine_portal.py avatars/elaine/runs/portal_run_31.xlsx
+python avatars/elaine/tools/local_sim.py     avatars/elaine/prompts/portal_v1.txt   # iterate offline
+python avatars/elaine/tools/run_anchors.py                                          # 15 anchors, live
+python avatars/elaine/tools/analyze_portal.py avatars/elaine/runs/portal_run_31.xlsx
+python avatars/elaine/tools/export_chats.py elaine_anchors_<timestamp>.xlsx  # readable chat log
 ```
 
 ### [Benton](avatars/benton/) — fixed-line band tests
@@ -102,8 +119,8 @@ thing. [prompts/portal_FINAL.txt](avatars/benton/prompts/portal_FINAL.txt) is
 the shipped prompt; `working.txt` and `v6`/`v7` are the trail behind it.
 
 ```bash
-python local_sim.py       avatars/benton/prompts/portal_FINAL.txt   # offline
-python run_band_scripts.py                                          # live, all six
+python avatars/benton/tools/local_sim.py       avatars/benton/prompts/portal_FINAL.txt   # offline
+python avatars/benton/tools/band_scripts.py                                          # live, all six
 ```
 
 ### [John](avatars/john/) — one archived run

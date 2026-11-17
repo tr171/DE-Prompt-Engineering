@@ -4,8 +4,8 @@ BPAI QA Automation - Run analyser
 Reads a results file and reports the gaps, so you can fix them in the portal
 without needing another portal run to find them.
 
-    python analyze_run.py avatars/gladys/runs/portal_run_28.xlsx
-    python analyze_run.py bpai_qa_results_*.xlsx
+    python core/analyze_run.py avatars/gladys/runs/portal_run_28.xlsx
+    python core/analyze_run.py bpai_qa_results_*.xlsx
 
 Works on BOTH the QA Lab's "Download Excel" export and files produced by
 run_qa_tests.py - they share the same Transcripts layout. No API calls, no
@@ -26,6 +26,14 @@ WHAT IT CHECKS
    the learner never actually said. The evaluation prompt forbids this, so
    every hit is a real defect.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/analyze_run.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
 
 import argparse
 import glob

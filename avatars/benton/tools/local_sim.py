@@ -1,18 +1,27 @@
 """
 Local Benton simulator + checker
 --------------------------------
-Runs the fixed band scripts (run_band_scripts.SCRIPTS) against a Benton prompt
+Runs the fixed band scripts (band_scripts.SCRIPTS) against a Benton prompt
 file using OpenAI directly (gpt-4o), instead of the Better Path AI portal.
 This lets you iterate on the prompt before pasting it into the portal. The
 portal wraps the fields in its own template, so ALWAYS confirm the final
 prompt in the portal afterwards.
 
 Usage:
-    python local_sim.py avatars/benton/prompts/working.txt              all 6 scripts, 2 rounds
-    python local_sim.py avatars/benton/prompts/working.txt --rounds 3 1 4 6
+    python avatars/benton/tools/local_sim.py avatars/benton/prompts/working.txt              all 6 scripts, 2 rounds
+    python avatars/benton/tools/local_sim.py avatars/benton/prompts/working.txt --rounds 3 1 4 6
 
 Writes local_sim_<timestamp>.txt (full transcripts + check report).
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root and core/ on the import path, so this runs as
+# `python avatars/benton/tools/local_sim.py` from the repo root. config.py and personas/
+# live at the root; the shared engine lives in core/.
+import pathlib as _pathlib, sys as _sys
+_ROOT = _pathlib.Path(__file__).resolve().parents[3]
+_sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
+# --------------------------------------------------------------------------
 
 import re
 import sys
@@ -23,7 +32,7 @@ from datetime import datetime
 import requests
 
 from config import OPENAI_API_KEY, OPENAI_BASE_URL
-from run_band_scripts import SCRIPTS, BED_RE, IV_RE
+from band_scripts import SCRIPTS, BED_RE, IV_RE
 
 MODEL = "gpt-4o"
 TEMPERATURE = 0.7

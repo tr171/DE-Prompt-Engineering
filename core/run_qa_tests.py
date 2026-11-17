@@ -26,10 +26,18 @@ Matches the live app (per the Tony findings, Oct 2026):
   (Oct 13, 2026).
 
 Usage:
-    python run_qa_tests.py
+    python core/run_qa_tests.py
 
 See GUIDE.md for full setup instructions and troubleshooting.
 """
+
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/run_qa_tests.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
 
 import os
 import re

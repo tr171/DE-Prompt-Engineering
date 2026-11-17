@@ -18,12 +18,16 @@ We confirmed the avatar side works by testing it live against Madison - Behavior
 This came with:
 - `config.py` — your credentials and the list of avatars you're testing
 - `personas/` — a **folder**, not a single file: one file per avatar (e.g. `Tony.py`, `Ross.py`), a blank `_TEMPLATE.py` for new avatars, and an `__init__.py` that combines them and holds a few settings shared across every avatar. See Step 6.
-- `check_personas.py` — checks every avatar file for common mistakes before you run (Step 6)
-- `probe_after_mode.py` — a diagnostic that shows which avatar fields the platform uses for follow-up questions (only when asked to run it)
-- `learner_ai.py` — talks to OpenAI to generate each learner line
-- `run_qa_tests.py` — the tool itself, run this to go
-- `test_openai_connection.py` — a quick, standalone check that your OpenAI credentials work, before running the full tool
+- `core/check_personas.py` — checks every avatar file for common mistakes before you run (Step 6)
+- `core/probe_after_mode.py` — a diagnostic that shows which avatar fields the platform uses for follow-up questions (only when asked to run it)
+- `core/learner_ai.py` — talks to OpenAI to generate each learner line
+- `core/run_qa_tests.py` — the tool itself, run this to go
+- `core/test_openai_connection.py` — a quick, standalone check that your OpenAI credentials work, before running the full tool
+- `core/analyze_run.py` and `core/judge.py` — the two ways to check a finished run (Steps 8–9)
+- `avatars/<name>/` — everything specific to one avatar: the prompts you paste into the portal, the results of past runs, the findings written up, and in `tools/` any scripts that only make sense for that avatar
 - `requirements.txt` — the two small libraries it needs
+
+**Run every command from this top folder**, giving the full path — `python core/run_qa_tests.py`, not `cd core` first. Each script finds `config.py` and `personas/` on its own from there.
 
 ## Important: about your credentials
 
@@ -54,11 +58,11 @@ Unzip the download into that folder. You should end up with this layout — note
 ```
 bpai-qa-automation\
     config.py
-    learner_ai.py
-    run_qa_tests.py
-    check_personas.py
-    probe_after_mode.py
-    test_openai_connection.py
+    core/learner_ai.py
+    core/run_qa_tests.py
+    core/check_personas.py
+    core/probe_after_mode.py
+    core/test_openai_connection.py
     requirements.txt
     GUIDE.md
     personas\
@@ -74,11 +78,11 @@ bpai-qa-automation\
 **A note on file names:** the code files in this download are named `.txt` instead of `.py` (e.g. `run_qa_tests.txt`, and inside the `personas` subfolder `__init__.txt`, `Tony.txt`, and so on). That's deliberate: a lot of corporate security software blocks `.py` files from being downloaded or emailed at all. You need to rename them back before they'll work. Open Command Prompt, `cd` into your folder, and run these lines:
 
 ```
-ren learner_ai.txt learner_ai.py
-ren run_qa_tests.txt run_qa_tests.py
-ren check_personas.txt check_personas.py
-ren probe_after_mode.txt probe_after_mode.py
-ren test_openai_connection.txt test_openai_connection.py
+ren learner_ai.txt core/learner_ai.py
+ren run_qa_tests.txt core/run_qa_tests.py
+ren check_personas.txt core/check_personas.py
+ren probe_after_mode.txt core/probe_after_mode.py
+ren test_openai_connection.txt core/test_openai_connection.py
 for %f in (personas\*.txt) do ren "%f" "%~nf.py"
 ```
 
@@ -150,7 +154,7 @@ Open `config.py` and fill in `OPENAI_API_KEY` and `OPENAI_MODEL` with what they 
 
 **Before moving to Step 6, run the quick connection test:**
 ```
-python test_openai_connection.py
+python core/test_openai_connection.py
 ```
 This sends one trivial request and tells you immediately whether your key and model name work — a lot faster than finding out partway through a full run. It prints a clear explanation if something's wrong (wrong key, wrong model name, rate limited, etc.).
 
@@ -198,9 +202,9 @@ As of October 13, 2026 **every avatar file uses the same layout.** `Tony.py` and
 
 From the tool's folder, run:
 ```
-python check_personas.py
+python core/check_personas.py
 ```
-(or `python check_personas.py Ross` for one file). It never calls OpenAI or Better Path AI and never changes anything. It reads every avatar file and `config.py`, then lists:
+(or `python core/check_personas.py Ross` for one file). It never calls OpenAI or Better Path AI and never changes anything. It reads every avatar file and `config.py`, then lists:
 - **ERRORS** — things that stop an avatar from running correctly, such as a name that doesn't match `config.py`, rubric text in the context, or a run set naming a persona that doesn't exist.
 - **warnings** — things to fix next time you work on that avatar, such as an empty Trap Test slot, a persona with no "Please coach me" line, or no expected scores yet.
 
@@ -209,7 +213,7 @@ python check_personas.py
 1. Copy `personas\_TEMPLATE.py` and rename the copy to the avatar's name (e.g. `Carol.py`).
 2. Fill in every `<...>` placeholder. Use `Tony.py` or `Ross.py` as the worked example.
 3. Add the avatar to `config.py`'s `SCENARIOS` with exactly the same name (Step 3).
-4. Run `python check_personas.py`, then a 1-round test run (Step 7).
+4. Run `python core/check_personas.py`, then a 1-round test run (Step 7).
 
 ### Settings shared by every avatar
 
@@ -224,7 +228,7 @@ python check_personas.py
 
 1. In Command Prompt, in that same folder, run:
    ```
-   python run_qa_tests.py
+   python core/run_qa_tests.py
    ```
 2. It lists every avatar that's ready to run (has both an entry in `config.py`'s `SCENARIOS` and at least one filled-in persona prompt in its `personas/` file) and asks which ones you want to test today:
    ```
@@ -256,22 +260,22 @@ Once you've answered the two prompts (avatars, then rounds), you can walk away �
 
 ## Step 8: Check a run for gaps
 
-`analyze_run.py` reads a results file and tells you what went wrong, without
+`core/analyze_run.py` reads a results file and tells you what went wrong, without
 you having to read hundreds of transcript rows. It makes **no** API calls, so
 it costs nothing, needs no token, and can be run as many times as you like.
 
 ```
-python analyze_run.py avatars/gladys/runs/qa_20261116_162652.xlsx
+python core/analyze_run.py avatars/gladys/runs/qa_20261116_162652.xlsx
 ```
 
 It also reads the QA Lab's own "Download Excel" export, so you can analyse a
 portal run the same way:
 
 ```
-python analyze_run.py avatars/gladys/runs/portal_run_28.xlsx
+python core/analyze_run.py avatars/gladys/runs/portal_run_28.xlsx
 ```
 
-Wildcards work too: `python analyze_run.py bpai_qa_results_*.xlsx`
+Wildcards work too: `python core/analyze_run.py bpai_qa_results_*.xlsx`
 
 It reports five things:
 
@@ -299,11 +303,11 @@ internal id), it works out which avatar file the transcript matches. Use
 
 ## Step 9: Have an AI judge grade the run
 
-`judge.py` goes further than Step 8: it sends each conversation to the judge
+`core/judge.py` goes further than Step 8: it sends each conversation to the judge
 model along with that persona's `EXPECTATIONS`, and asks for a verdict.
 
 ```
-python judge.py avatars/gladys/runs/qa_20261116_162652.xlsx
+python core/judge.py avatars/gladys/runs/qa_20261116_162652.xlsx
 ```
 
 It adds a **Judge** sheet to the same Excel file, one row per conversation:
@@ -320,11 +324,11 @@ short, checkable statements, the way `personas/Gladys.py` does.
 
 ## Step 10: Set an avatar up in the QA Lab portal
 
-`export_portal_personas.py` turns a persona file into a paste-ready sheet for
+`core/export_portal_personas.py` turns a persona file into a paste-ready sheet for
 the QA Lab's Personas tab, so the portal and the code can't drift apart.
 
 ```
-python export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md
+python core/export_portal_personas.py Gladys --out avatars/gladys/settings/PORTAL_PERSONAS.md
 ```
 
 The file it writes has one block per persona with every QA Lab field filled in:
@@ -392,15 +396,15 @@ The tool's `send_message` payload was confirmed against a real captured request 
 2. In DevTools's Network tab, find the requests that fired — look for a `POST` to `/api/simulations/` (near the top, when you first entered the scenario) and a `POST` to `/api/chat/` (when you sent the message).
 3. Right-click each one, **Copy > Copy as fetch**, paste into Notepad.
 4. Look at each one's `body:` part — it'll show the exact JSON keys the app actually sends.
-5. Open `run_qa_tests.py`: match `create_simulation`'s `payload = {...}` to the `/api/simulations/` body, and `send_message`'s `payload = {...}` to the `/api/chat/` body. Also check whether `AVATAR_MODEL` near the top of the file (currently `"gpt-4o"`) still matches the `"model"` field you see — if you added a new avatar and it uses a different one, update it there.
+5. Open `core/run_qa_tests.py`: match `create_simulation`'s `payload = {...}` to the `/api/simulations/` body, and `send_message`'s `payload = {...}` to the `/api/chat/` body. Also check whether `AVATAR_MODEL` near the top of the file (currently `"gpt-4o"`) still matches the `"model"` field you see — if you added a new avatar and it uses a different one, update it there.
 
 **A note on that Network tab work in general:** whenever you copy a request as fetch to send to me for debugging, please strip out the `authorization: Bearer ...` line first (or replace the token with `Bearer <removed>`) — that token is effectively your password for that Better Path AI session. Everything else in the request (URLs, body, other headers) is fine to share.
 
 **Conversations run much longer than expected (close to the 24-turn cap every time, never reaching coaching)**
-The persona isn't recognizing when the scenario is over. Check that persona's "When to ask for coaching" line (the `_WHEN` line near the top of the avatar file) names a moment that actually happens in this scenario, e.g. "right after Madison agrees to stay on the unit." Run `python check_personas.py`: it warns about any persona with no "Please coach me" line.
+The persona isn't recognizing when the scenario is over. Check that persona's "When to ask for coaching" line (the `_WHEN` line near the top of the avatar file) names a moment that actually happens in this scenario, e.g. "right after Madison agrees to stay on the unit." Run `python core/check_personas.py`: it warns about any persona with no "Please coach me" line.
 
 **"Please coach me" shows up as an ordinary scenario message in the Excel file**
-That shouldn't happen as of October 13, 2026: when the learner says "Please coach me," the tool switches straight to coaching and sends it as `during`, like the app. If you see it, you're on an older `run_qa_tests.py`. Replace it with the latest one.
+That shouldn't happen as of October 13, 2026: when the learner says "Please coach me," the tool switches straight to coaching and sends it as `during`, like the app. If you see it, you're on an older `core/run_qa_tests.py`. Replace it with the latest one.
 
 **Mentoring follow-ups run to the 3-question cap every time**
 Same idea, but for `MENTORING_FOLLOWUP_PROMPT` in `personas\__init__.py` — the learner AI isn't recognizing when it's asked enough. This one's shared across every avatar and persona, so a tweak there affects every conversation's follow-up phase.

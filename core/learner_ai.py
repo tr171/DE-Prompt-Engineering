@@ -7,6 +7,14 @@ what makes each conversation adapt to the avatar in real time instead of
 following a fixed script.
 """
 
+# --- repo bootstrap -------------------------------------------------------
+# Puts the repo root on the import path, so this runs as
+# `python core/learner_ai.py` from the repo root. config.py and personas/ live
+# there; the rest of the engine sits next to this file.
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parents[1]))
+# --------------------------------------------------------------------------
+
 import json
 import time
 
