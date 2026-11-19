@@ -35,6 +35,7 @@ import requests
 
 from config import AVATAR_MODEL, OPENAI_API_KEY, OPENAI_BASE_URL
 from band_scripts import CAREGIVER, SCRIPTS
+from coaching_standard import check_score_lines
 
 MODEL = AVATAR_MODEL
 
@@ -97,10 +98,14 @@ POINTS = {
     ("Missed", "Missed", "Did"): 3, ("Missed", "Missed", "Partly"): 1, ("Missed", "Missed", "Missed"): 0,
 }
 FIXED_REASON = {
-    "Empathy": "i did not hear my feelings acknowledged",
-    "CARES": "my worry was not answered",
-    "Communication": "i was not given calm, small steps",
+    "Empathy": "i didn't hear you acknowledge my feelings",
+    "CARES": "i didn't hear you answer my worry",
+    "Communication": "i didn't hear you offer calm, small steps",
 }
+# The example line should move Elaine toward washing (senior care coaching standard).
+# Loose on purpose: a miss is a warning for a human to read, not a fail.
+GOAL_RE = re.compile(r"\b(shower|bath|wash|washcloth|towel|water|warm|clean|freshen|hands|"
+                     r"start|step|slowly|pace|together|come|go|ready|minutes|look)\b", re.I)
 
 
 def norm(s):
@@ -142,11 +147,14 @@ def run_session(fields, num):
     eval_system = "\n\n".join([fields["EVALUATION PREFIX"],
                                "## Feedback Categories\n" + fields["FEEDBACK CATEGORIES"],
                                "## Evaluation Format\n" + fields["EVALUATION FORMAT"]])
+    # The suffix ("After coaching scores have been provided ...") governs the turns AFTER
+    # coaching. Sending it with "Please coach me" made the model skip straight to
+    # "My coaching is above" in most local runs, which the portal (run #31) never did.
     coach_msgs = [{"role": "system", "content": eval_system}] + convo + \
-                 [{"role": "user", "content": "Please coach me"},
-                  {"role": "system", "content": fields["EVALUATION SUFFIX"]}]
+                 [{"role": "user", "content": "Please coach me"}]
     coaching = chat(coach_msgs)
     followup = chat(coach_msgs + [{"role": "assistant", "content": coaching},
+                                  {"role": "system", "content": fields["EVALUATION SUFFIX"]},
                                   {"role": "user", "content": script["followup"]}])
     return opening, turns, coaching, followup
 
@@ -254,7 +262,11 @@ def check_scene(num, turns):
 def parse_recap(line, category):
     """Maps a recap line onto the three item levels. None if it does not match."""
     body = norm(line).rstrip(".")
-    parts = [p.strip() for p in re.split(r",\s*(?:and |but )?|\s+(?:and|but)\s+", body) if p.strip()]
+    # Split on commas first: "you spoke short and calm" has its own "and" inside it.
+    parts = [re.sub(r"^(?:and|but)\s+", "", p.strip()) for p in body.split(",") if p.strip()]
+    if len(parts) == 2:  # "A, B and C" written without the second comma
+        tail = re.split(r"\s+(?:and|but)\s+(?=(?:you|i)\b)", parts[1], maxsplit=1)
+        parts = [parts[0]] + [x.strip() for x in tail]
     if len(parts) != 3:
         return None, parts
     levels = []
@@ -327,48 +339,23 @@ def check_coaching(num, turns, coaching, followup):
         if "<topic>" in recap:
             fails.append(f"RECAP {cat}: left the <topic> placeholder unfilled")
 
-    # reasons
+    # reasons and changes: the senior care coaching standard (core/coaching_standard.py)
+    sf, sw, found = check_score_lines(coaching, CATEGORIES, [n for n, _ in turns],
+                                      [r for _, r in turns], goal_re=GOAL_RE,
+                                      require_change="did not get a chance to talk" not in coaching)
+    fails += [f"STANDARD {x}" for x in sf]
+    warns += [f"STANDARD {x}" for x in sw]
     for cat, score, rest in score_lines:
-        s = int(score)
-        quoted = re.search(r'you did well by saying ["“]([^"”]+)["”]', rest)
-        if s >= 3:
-            if not quoted:
-                fails.append(f"REASON {cat}: score {s} needs 'you did well by saying \"...\"'")
-            else:
-                q = quoted.group(1).strip(" .,")
-                if len(q.split()) > 6:
-                    fails.append(f"REASON {cat}: quote is {len(q.split())} words (max 6): {q!r}")
-                if norm(q) and norm(q) not in nurse_norm:
-                    fails.append(f"REASON {cat}: quote is not in any caregiver line: {q!r}")
-        else:
-            if norm(FIXED_REASON[cat]) not in norm(rest):
-                fails.append(f"REASON {cat}: score {s} must use the fixed reason, got {rest[:70]!r}")
-
-    # tips
-    for cat, score, rest in score_lines:
-        s = int(score)
-        tip = re.search(r'To improve, when I said ["“]([^"”]+)["”], you could have '
-                        r'said ["“]([^"”]+)["”]', rest)
-        if s == 10 and tip:
-            fails.append(f"TIP {cat}: a 10 must get no tip")
-        if s < 10 and not tip:
-            fails.append(f"TIP {cat}: score {s} must carry a tip in the required wording")
-        if tip:
-            mine, line = tip.group(1).strip(" .,"), tip.group(2)
-            if norm(mine) and norm(mine) not in elaine_norm:
-                fails.append(f"TIP {cat}: quotes words Elaine never said: {mine!r}")
-            if len(mine.split()) > 6:
-                fails.append(f"TIP {cat}: quotes {len(mine.split())} of her words (max 6)")
-            if len(line.split()) > 12:
-                fails.append(f"TIP {cat}: suggested line is {len(line.split())} words (max 12)")
-            if re.search(r"\byou (need to|have to|must)\b|^get up|it'?s time for", line, re.I):
-                fails.append(f"TIP {cat}: suggested line is a command: {line!r}")
+        if int(score) <= 2 and norm(FIXED_REASON[cat]) not in norm(rest):
+            fails.append(f"REASON {cat}: score {score} must use the fixed reason, got {rest[:70]!r}")
 
     # follow-up must not re-score
     if re.search(r"you receive a score of|you receive a \d+ out of", followup, re.I):
         fails.append("AFTER COACHING: the follow-up printed the scores again")
-    if len(followup.split()) > 30:
-        fails.append(f"AFTER COACHING: follow-up is {len(followup.split())} words (max 30)")
+    if re.search(r"\bwhen you said\b|\bwhen I said\s*[\"“]|\bTo improve\b|you could have said", followup, re.I):
+        fails.append(f"AFTER COACHING: follow-up uses the old tip wording: {followup[:80]!r}")
+    if len(followup.split()) > 40:
+        fails.append(f"AFTER COACHING: follow-up is {len(followup.split())} words (max 40)")
     return fails, warns, info
 
 

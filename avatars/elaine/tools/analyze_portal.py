@@ -21,7 +21,8 @@ _sys.path[:0] = [str(_ROOT), str(_ROOT / "core")]
 # --------------------------------------------------------------------------
 import re, sys, collections
 from openpyxl import load_workbook
-from local_sim import PHRASES, POINTS, CATEGORIES, FIXED_REASON, norm, sentences, parse_recap, BANNED_CHARS
+from local_sim import PHRASES, POINTS, CATEGORIES, FIXED_REASON, GOAL_RE, norm, sentences, parse_recap, BANNED_CHARS
+from coaching_standard import check_score_lines
 
 RED, GREEN, YELLOW, BOLD, OFF = "\033[31m", "\033[32m", "\033[33m", "\033[1m", "\033[0m"
 
@@ -105,42 +106,20 @@ def check(c):
             fails.append(("points", f"{cat}: recap says {levels} = {POINTS[levels]}, "
                                     f"coaching said {got[cat]}"))
 
-    # --- reasons and tips
+    # --- reasons and changes: the senior care coaching standard
+    sf, _sw, _ = check_score_lines(coach, CATEGORIES, c["learner"], c["avatar"], goal_re=GOAL_RE,
+                                   require_change="did not get a chance to talk" not in coach)
+    fails += [("standard", x) for x in sf]
     for cat, s, rest in score_lines:
-        s = int(s)
-        q = re.search(r'you did well by saying ["“]([^"”]+)["”]', rest)
-        if s >= 3:
-            if not q:
-                fails.append(("reason", f"{cat}: score {s} needs a 'you did well by saying' quote"))
-            else:
-                t = q.group(1).strip(" .,")
-                if len(t.split()) > 6:
-                    fails.append(("reason", f"{cat}: quote is {len(t.split())} words (max 6)"))
-                if norm(t) and norm(t) not in learner_norm:
-                    fails.append(("fabricated", f"{cat}: quote not in any learner line: {t[:50]!r}"))
-        elif norm(FIXED_REASON[cat]) not in norm(rest):
+        if int(s) <= 2 and norm(FIXED_REASON[cat]) not in norm(rest):
             fails.append(("reason", f"{cat}: score {s} must use the fixed reason"))
-        tip = re.search(r'To improve, when I said ["“]([^"”]+)["”], you could have '
-                        r'said ["“]([^"”]+)["”]', rest)
-        if s == 10 and tip:
-            fails.append(("tip", f"{cat}: a 10 must get no tip"))
-        if s < 10 and not tip:
-            fails.append(("tip", f"{cat}: score {s} must carry a tip in the required wording"))
-        if tip:
-            mine, line = tip.group(1).strip(" .,"), tip.group(2)
-            if norm(mine) and norm(mine) not in elaine_norm:
-                where = "a learner line" if norm(mine) in learner_norm else "nowhere"
-                fails.append(("fabricated", f"{cat}: tip quotes words Elaine never said "
-                                            f"(found in {where}): {mine[:50]!r}"))
-            if len(line.split()) > 12:
-                fails.append(("tip", f"{cat}: suggested line is {len(line.split())} words (max 12)"))
 
     # --- after coaching
     for sp, msg in c["after"]:
         if "Coaching" in sp and re.search(r"you receive a score of", msg):
             fails.append(("after", "re-printed the scores in a follow-up"))
-        if "Coaching" in sp and len(msg.split()) > 30:
-            fails.append(("after", f"follow-up is {len(msg.split())} words (max 30)"))
+        if "Coaching" in sp and len(msg.split()) > 40:
+            fails.append(("after", f"follow-up is {len(msg.split())} words (max 40)"))
     return got, fails
 
 

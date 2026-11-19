@@ -42,18 +42,21 @@ from openpyxl import Workbook
 
 from config import AVATAR_MODEL
 from anchor_scripts import ANCHORS, ORDER
-from local_sim import CATEGORIES, POINTS, parse_recap
+from local_sim import CATEGORIES, GOAL_RE, POINTS, parse_recap
+from coaching_standard import check_score_lines
 from run_qa_tests import (MODE_COACHING, MODE_SCENE, create_simulation,
                           send_message, start_session)
 
 # The Elaine V2 build. Confirmed 2026-11-16: opens "Hello. What do you want?"
 # and its coaching leads with the recap line, then "you receive a score of".
+# Override with --scenario/--agent to test a copy (e.g. 182/178, "Elaine - Test - Aakash").
 SCENARIO_ID, AGENT_ID = 169, 165
 GREEN, RED, YELLOW, BOLD, DIM, OFF = ("\033[32m", "\033[31m", "\033[33m",
                                       "\033[1m", "\033[2m", "\033[0m")
 
 
 def run_one(name, round_num):
+    global SCENARIO_ID, AGENT_ID
     a = ANCHORS[name]
     sim = create_simulation(SCENARIO_ID, AGENT_ID)
     sid, opening = start_session(SCENARIO_ID, AGENT_ID)
@@ -90,6 +93,12 @@ def main():
     rounds = 1
     if "--rounds" in args:
         i = args.index("--rounds"); rounds = int(args[i + 1]); del args[i:i + 2]
+    global SCENARIO_ID, AGENT_ID
+    for flag in ("--scenario", "--agent"):
+        if flag in args:
+            i = args.index(flag); val = int(args[i + 1]); del args[i:i + 2]
+            if flag == "--scenario": SCENARIO_ID = val
+            else: AGENT_ID = val
     names = args or ORDER
     bad = [n for n in names if n not in ANCHORS]
     if bad:
@@ -106,7 +115,7 @@ def main():
     ws.title = "Anchors"
     ws.append(["Anchor", "Round", "Category", "Built to score", "Avatar scored",
                "Target met", "Avatar's own recap", "Recap scores", "Matches its table",
-               "Other categories", "What the script forces"])
+               "Other categories", "What the script forces", "Coaching standard"])
     tr = wb.create_sheet("Transcripts")
     tr.append(["Timestamp", "Avatar", "Round", "Persona", "Turn", "Speaker",
                "Message", "Model", "Coaching Mode", "Reply Seconds", "Metric"])
@@ -122,15 +131,18 @@ def main():
         target_ok = (got == a["target"])
         table_ok = (got is not None and table is not None and got == table)
         others = ", ".join(f"{c} {printed.get(c, '-')}" for c in CATEGORIES if c != cat)
+        learner = [m for sp, m, mode, _ in turns if sp == "You" and mode == "before"]
+        avatar = [m for sp, m, mode, _ in turns if sp == "Avatar" and mode == "before"]
+        sf, _sw, _ = check_score_lines(coaching, CATEGORIES, learner, avatar, goal_re=GOAL_RE)
         ws.append([name, rnd, cat, a["target"], got if got is not None else "no score",
                    "yes" if target_ok else "NO",
                    ", ".join(lv) if lv else "could not read recap",
                    table if table is not None else "-",
                    "yes" if table_ok else ("NO" if lv else "-"),
-                   others, a["why"]])
+                   others, a["why"], "; ".join(sf) or "pass"])
         for i, (sp, msg, mode, secs) in enumerate(turns):
             tr.append([stamp, "Elaine V2", rnd, name, i, sp, msg, AVATAR_MODEL, mode, secs, None])
-        rows.append((name, rnd, cat, a["target"], got, target_ok, lv, table, table_ok, others))
+        rows.append((name, rnd, cat, a["target"], got, target_ok, lv, table, table_ok, others, sf))
 
     for col, w in zip("ABCDEFGHIJK", [11, 7, 15, 15, 14, 12, 42, 13, 18, 26, 60]):
         ws.column_dimensions[col].width = w
@@ -141,16 +153,21 @@ def main():
     print(f"{BOLD}{'anchor':11} {'built':>6} {'got':>5}  {'target':>7}  {'table':>6}  "
           f"recap levels{OFF}")
     t_ok = b_ok = 0
-    for name, rnd, cat, target, got, target_ok, lv, table, table_ok, others in rows:
+    s_ok = 0
+    for name, rnd, cat, target, got, target_ok, lv, table, table_ok, others, sf in rows:
+        s_ok += not sf
         t_ok += target_ok; b_ok += table_ok
         m1 = f"{GREEN}ok{OFF}" if target_ok else f"{RED}off{OFF}"
         m2 = f"{GREEN}ok{OFF}" if table_ok else (f"{RED}off{OFF}" if lv else f"{DIM}?{OFF}")
         extra = "" if table_ok or not lv else f"  {DIM}(its recap = {table}){OFF}"
         print(f"{name:11} {target:>6} {str(got):>5}  {m1:>16}  {m2:>15}  "
               f"{', '.join(lv) if lv else '-'}{extra}")
+        for x in sf:
+            print(f"      {RED}standard{OFF} {x}")
     n = len(rows)
     print(f"\n  hit the score they were built for : {t_ok}/{n}")
     print(f"  score agrees with its own recap   : {b_ok}/{n}")
+    print(f"  follows the coaching standard     : {s_ok}/{n}")
     print(f"\nSaved {fn}  (Anchors sheet + full chat in Transcripts)")
 
 

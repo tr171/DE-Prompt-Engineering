@@ -418,7 +418,7 @@ EXPECTATIONS = {
         "avatar_pass": ["Snaps back after the 'it's been a little while' correction.", "Never gives in to plain repeated asks or reasons alone."],
         "avatar_fail": ["Elaine offers a small step herself."],
         "score_band": "12 or less and below Medium in every round. Elaine may agree after a line that names her specific fear and promises safety (accepted 10/4). Expected: 0-3 / 0-2 / 0-3 = 1-8.",
-        "coaching_expect": "Empathy reason quotes the correction line. Communication names the missing small step. 'It's time for your shower' counts as a command (Communication at most 6).",
+        "coaching_expect": "Empathy names the correction as the moment, told from Elaine's side, without quoting the learner. Communication names the missing small step. 'It's time for your shower' counts as a command (Communication at most 6).",
         "mentoring_expect": "Holds the score; explains with the correction or repeated asks as evidence.",
     },
     "Trap Test": {
@@ -450,7 +450,7 @@ EXPECTATIONS = {
         "avatar_pass": ["Snaps back within one reply of the first soft correction.", "No progress on the reply after each correction."],
         "avatar_fail": ["Ignores the correction and keeps softening."],
         "score_band": "Empathy 3 or lower (1.1 = 0, 1.3 = 0) in every round; this is the real check. Total 12-20. Expected: 3 / 6-10 / 5-8 = 14-21.",
-        "coaching_expect": "Empathy reason quotes a soft-correction line.",
+        "coaching_expect": "Empathy's change ties to the moment Elaine felt corrected, told from her side, without quoting the learner.",
         "mentoring_expect": "Explains why implying she is mistaken is correction, without changing the score.",
     },
     "Probe - Strict Avoider": {
@@ -458,7 +458,7 @@ EXPECTATIONS = {
         "avatar_pass": ["Never mentions washing, water, or the shower herself."],
         "avatar_fail": ["Raises washing on her own.", "Says yes to anything bathing-related."],
         "score_band": "Each category 4 or lower; total 12 or lower. Expected: 3 / 4 / 4 = 11.",
-        "coaching_expect": "3.2 and 3.3 are 0; tip says to move toward washing.",
+        "coaching_expect": "3.2 and 3.3 are 0; the change and its example line move toward washing.",
         "mentoring_expect": "'Thanks, that's helpful' gets one short sentence, no praise.",
     },
     "Probe - Overloader": {
@@ -474,7 +474,7 @@ EXPECTATIONS = {
         "avatar_pass": ["Resists the first two asks; softens after the switch.", "Yes in at least 2 of 4 rounds."],
         "avatar_fail": ["Never recovers despite skilled turns.", "Yes during the first two pushy messages."],
         "score_band": "13-20. The opening 'come take your shower now' is a command: 1.3 = 0 and Empathy at most 7; 3.1 = 0 and Communication at most 6; 3.3 at most 1 even with a yes. Opening with washing makes 2.1 = 0 and caps CARES at 7. Expected: yes 7 / 7 / 4 = 18; nothing accepted about 7 / 7 / 1 = 15.",
-        "coaching_expect": "CARES quotes the opening line as the cost.",
+        "coaching_expect": "CARES's change points at the moment Elaine first answered (before any washing word), without quoting the learner.",
         "mentoring_expect": "Explains the opening cost 2.1 specifically, in 2-3 sentences.",
     },
     "Probe - Efficient Expert": {
@@ -482,7 +482,7 @@ EXPECTATIONS = {
         "avatar_pass": ["Yes in at least 3 of 4 rounds.", "Yes within about 4-7 replies since washing."],
         "avatar_fail": ["Elaine invents new walls after the staircase is met.", "No yes in 2 or more rounds."],
         "score_band": "25-30. Expected: 10/10/10 = 28-30.",
-        "coaching_expect": "Categories at 10 give one sentence on what worked, no tip.",
+        "coaching_expect": "Categories at 10 end after the did-well sentence, with no change.",
         "mentoring_expect": "Gives one specific, honest refinement, not generic praise.",
     },
 }

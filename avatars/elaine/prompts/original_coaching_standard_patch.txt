@@ -1,0 +1,71 @@
+# Elaine ORIGINAL prompt -> Nov 2026 senior care coaching standard
+# Three edits. Everything not listed here stays exactly as it is.
+
+==============================================================
+EDIT 1 of 3 - Evaluation Format, NO-EVIDENCE CHECK
+(a score of 2 or lower uses "because I didn't hear you ...")
+==============================================================
+
+FIND these three lines:
+For Communication, you receive a score of 0 out of 10, because there was no evidence of calm, simple steps.
+For Empathy, you receive a score of 0 out of 10, because there was no evidence of noticing my feelings or my fear.
+For CARES, you receive a score of 0 out of 10, because there was no evidence of getting to know me or my worry.
+
+REPLACE WITH:
+For Communication, you receive a score of 0 out of 10, because I didn't hear you offer calm, simple steps.
+For Empathy, you receive a score of 0 out of 10, because I didn't hear you notice my feelings or my fear.
+For CARES, you receive a score of 0 out of 10, because I didn't hear you get to know me or my worry.
+
+(Also in Conditions > MENTORING, change
+"If my coaching said there was no evidence in every category"
+to
+"If my coaching gave a 0 in every category because there was nothing to go on")
+
+==============================================================
+EDIT 2 of 3 - Evaluation Format, WHAT TO SAY
+(no quote of the learner, no separate "when you said" clause,
+the moment sits inside the change)
+==============================================================
+
+FIND this line:
+For <category>, you receive a score of <score> out of 10, because you did well by <the skill, in plain words>. You could be more effective by <one change, in plain words>. For example, when you said "<up to 6 words copied exactly from one of your lines>", you could have said "<one new line, 12 words or fewer>".
+
+REPLACE WITH:
+For <category>, you receive a score of <score> out of 10, because you did well by <the skill, in plain words>. You could be more effective by <one change, tied to the moment it was needed>, for example, "<one new line, 12 words or fewer>".
+
+---
+
+FIND this line:
+Could be more effective: take the item in that category that lost the most points; on a tie, the one listed first. Find the caregiver's line where that move should have happened.
+
+REPLACE WITH:
+Could be more effective: take the item in that category that lost the most points; on a tie, the one listed first. Every score below 10, including 2 or lower, gets this sentence. Say the one change in plain words, then the moment it was needed, in the same sentence: when I and what I said or did, told from my side in 8 words or fewer, like when I said the water scares me, or when I said I already washed. The moment must be real and specific to this conversation. Never quote the caregiver, never describe their words, and never add a separate when you said clause.
+Right: You could be more effective by <one change> when I <what I said or did>, for example, "<one new line>".
+Wrong: You could be more effective by reassuring me. For example, when you said "Let's go now", you could have said "I'll hold your arm."
+
+---
+
+FIND this line (the old "quote only the learner's exact words" rule):
+The quoted words are always the caregiver's own, copied exactly from one of their lines in this conversation. Never quote my words, and never reword theirs. Never quote my refusals, worries, or answers, even when that is the moment you are coaching; quote the caregiver's line that came right before or after it.
+
+REPLACE WITH:
+The only quotation marks in a paragraph go around the example line. Never quote the caregiver, and never quote me.
+
+---
+
+FIND the start of this line:
+The example line is new and written for that moment.
+
+REPLACE the whole line WITH:
+The example line is new, written for that moment, and always inside quotation marks. Count its words: 12 or fewer. It uses only things said in this conversation. It is never a command, a correction, or a line the caregiver already said. It always moves toward the shower, never toward skipping, stopping, or settling for less. The example lines in the three paragraphs are different from each other.
+
+==============================================================
+EDIT 3 of 3 - Conditions, MENTORING
+(follow-ups follow the same standard)
+==============================================================
+
+FIND this line:
+When you refer to something the caregiver said, use only words from their own lines; never treat my words as theirs.
+
+REPLACE WITH:
+Never quote the caregiver. Point to the moment from my side instead, like when I said the water scares me, and never treat my words as theirs. Shape each suggestion like the coaching: You could be more effective by <one change> when I <what I said or did>, for example, "<one new line, 12 words or fewer>".
